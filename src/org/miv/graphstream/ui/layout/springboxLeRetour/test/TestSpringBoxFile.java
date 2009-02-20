@@ -14,7 +14,7 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-package org.miv.graphstream.ui.layout.springBoxLeRetour.test;
+package org.miv.graphstream.ui.layout.springboxLeRetour.test;
 
 import java.awt.Color;
 import java.io.File;
@@ -25,9 +25,9 @@ import java.util.Random;
 
 import javax.swing.JFileChooser;
 
-import org.miv.graphstream.algorithm.layout2.Layout;
-import org.miv.graphstream.algorithm.layout2.LayoutListener;
-import org.miv.graphstream.algorithm.layout2.springboxLeRetour.*;
+import org.miv.graphstream.ui.layout.Layout;
+import org.miv.graphstream.ui.layout.LayoutListener;
+import org.miv.graphstream.ui.layout.springboxLeRetour.*;
 import org.miv.graphstream.graph.Edge;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.Node;
@@ -38,11 +38,13 @@ import org.miv.graphstream.io.GraphReaderListenerHelper;
 import org.miv.graphstream.ui.GraphViewerListener;
 import org.miv.graphstream.ui.GraphViewerRemote;
 import org.miv.graphstream.ui.RemoteSprite;
-import org.miv.pherd.gui.SwingParticleViewer;
+//import org.miv.pherd.gui.SwingParticleViewer;
 import org.miv.pherd.ntree.BarycenterCellData;
 import org.miv.pherd.ntree.Cell;
 import org.miv.pherd.ntree.NTree;
 import org.miv.util.Environment;
+
+import static org.miv.graphstream.algorithm.Toolkit.*;
 
 /**
  * Test the elastic box with various graphs and graph generators.
@@ -220,7 +222,7 @@ public class TestSpringBoxFile implements LayoutListener, GraphViewerListener
 		while( i.hasNext() )
 		{
 			Edge e = i.next();
-			float len = graph.algorithm().getEdgeLength( e );
+			float len = edgeLength( e );
 			length += len;
 			n ++;
 			

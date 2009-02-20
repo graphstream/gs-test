@@ -14,15 +14,15 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-package org.miv.graphstream.ui.layout.springBoxLeRetour.test;
+package org.miv.graphstream.ui.layout.springboxLeRetour.test;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
-import org.miv.graphstream.algorithm.layout2.LayoutRunner.LayoutRemote;
-import org.miv.graphstream.algorithm.layout2.springboxLeRetour.SpringBox;
+import org.miv.graphstream.ui.layout.LayoutRunner.LayoutRemote;
+import org.miv.graphstream.ui.layout.springboxLeRetour.SpringBox;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.implementations.MultiGraph;
 import org.miv.graphstream.io.GraphParseException;

@@ -14,7 +14,7 @@
  * Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-package org.miv.graphstream.algorithm.layout2.springboxLeRetour.test;
+package org.miv.graphstream.ui.layout.springBoxLeRetour.test;
 
 import java.awt.Color;
 import java.io.File;

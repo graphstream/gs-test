@@ -28,7 +28,6 @@ import org.miv.graphstream.graph.Node;
 import org.miv.graphstream.graph.Path;
 import org.miv.graphstream.graph.implementations.DefaultGraph;
 
-//import org.junit.* ;
 import static org.junit.Assert.* ;
 
 /**
@@ -45,7 +44,9 @@ public class TestAStar
 		tas.setUp();
 //		tas.testAStarNoWeights();
 //		tas.testAStarWeighted1();
-		tas.testAStarWeighted2();
+//		tas.testAStarWeighted2();
+//		tas.testAStarDistances1();
+		tas.testAStarDistances2();
 		tas.graph.display();
 	}
 
@@ -84,11 +85,18 @@ public class TestAStar
 		astar = new AStar();
 		astar.setGraph( graph );
 		astar.setCosts( new AStar.DefaultCosts( "weight" ) );
+		
+		// With this default costs object, the A* algorithm works like the Dijkstra algorithm.
+		// This means that g is evaluated as normal, but h is always 0.
 	}
 
 	@Test
 	public void testAStarNoWeights()
 	{
+		// Try to find a path between A and F, with all edges having a
+		// default weight of 1. This is done with the default costs, with
+		// h always evaluated as 0.
+		
 		astar.compute( "A", "F" );
 		
 		Path path = astar.getShortestPath();
@@ -112,6 +120,13 @@ public class TestAStar
 	@Test
 	public void testAStarWeighted1()
 	{
+		// Try to find a path between A and F, with all edges having a
+		// default weight of 1, excepted the BF edge with weight 1.5.
+		// This is done with the default costs, with
+		// h always evaluated as 0. The fact BF has a larger cost would
+		// orient a greedy algorithm toward BC then CD. AStar will peek
+		// BC, but not CD.
+		
 		AB.setAttribute( "weight", 1 );
 		BC.setAttribute( "weight", 1 );
 		BF.setAttribute( "weight", 1.5f );	// First orient the algorithm toward BC.
@@ -142,6 +157,11 @@ public class TestAStar
 	@Test
 	public void testAStarWeighted2()
 	{
+		// Same test as AStarWeighted1, but the cost of path A-B-C-D-E-F is smaller
+		// Than the path A-B-F.
+		// Therefore the shortest path is A -> B -> C -> D -> E -> F, sum = 1.4.
+		// Whereas path A -> B -> F sum = 2.
+		
 		AB.setAttribute( "weight", 1.0f );
 		BC.setAttribute( "weight", 0.1f );
 		BF.setAttribute( "weight", 1.0f );
@@ -149,13 +169,108 @@ public class TestAStar
 		DE.setAttribute( "weight", 0.1f );
 		EF.setAttribute( "weight", 0.1f );
 		
-		// Therefore the shortest path is A -> B -> C -> D -> E -> F, sum = 1.4.
-		// Whereas path A -> B -> F sum = 2.
-		
 		astar.compute( "A", "F" );
 		
 		Path path = astar.getShortestPath();
 		
+		List<Edge> edges = path.getEdgePath();
+		
+		for( Edge edge: edges )
+			edge.addAttribute( "color", "red" );
+		
+		Iterator<? extends Edge> i = edges.iterator();
+		
+		Edge e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "AB" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "BC" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "CD" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "DE" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "EF" ) );
+		assertTrue( ! i.hasNext() );		
+	}
+	
+	@Test
+	public void testAStarDistances1()
+	{
+		// Now make the test with real Euclidian distance.
+		// Each node is assigned a position in a 2D space.
+		// The costs object is revised to consider h as the
+		// straight line distance (the shortest one). This is
+		// and admissible h heuristic.
+		
+		A.setAttribute( "xy", 0,  0 );
+		B.setAttribute( "xy", 1,  0 );
+		C.setAttribute( "xy", 2,  1 );
+		F.setAttribute( "xy", 2, -1 );
+		D.setAttribute( "xy", 3,  1 );
+		E.setAttribute( "xy", 3, -1 );
+		
+		//    0     1 2     3
+		//  1         C --- D
+		//           /      |
+		//  0 A --- B       |
+		//           \      |
+		// -1         F --- E
+		
+		astar.setCosts( new AStar.DistanceCosts() );
+		astar.compute( "A", "F" );
+
+		Path       path  = astar.getShortestPath();
+		List<Edge> edges = path.getEdgePath();
+		
+		for( Edge edge: edges )
+			edge.addAttribute( "color", "red" );
+		
+		Iterator<? extends Edge> i = edges.iterator();
+		
+		Edge e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "AB" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "BF" ) );
+		assertTrue( ! i.hasNext() );		
+	}
+	
+	@Test
+	public void testAStarDistances2()
+	{
+		// The same as AStarDistance1 but with the path A-B-C-D-E-F shorter
+		// than the path A-B-G-F with a node G added. 
+		
+		Node G  = graph.addNode( "G" );
+		
+		graph.removeEdge( "BF" );
+		graph.addEdge( "BG", "B", "G" );
+		graph.addEdge( "GF", "G", "F" );
+		
+		A.setAttribute( "xy", 0, 0 );
+		B.setAttribute( "xy", 1, 0 );
+		C.setAttribute( "xy", 2, 1 );
+		D.setAttribute( "xy", 3, 1 );
+		E.setAttribute( "xy", 4, 1 );
+		F.setAttribute( "xy", 5, 1 );
+		G.setAttribute( "xy", 6, 0 );
+		G.setAttribute( "label", "G" );
+		
+		//    0   1 2  3  4  5 6
+		//  1       C--D--E--F
+		//         /          \
+		//  0 A---B------------G        
+		
+		astar.setCosts( new AStar.DistanceCosts() );
+		astar.compute( "A", "F" );
+
+		Path       path  = astar.getShortestPath();
 		List<Edge> edges = path.getEdgePath();
 		
 		for( Edge edge: edges )

@@ -26,7 +26,7 @@ import org.miv.graphstream.graph.Edge;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.Node;
 import org.miv.graphstream.graph.Path;
-import org.miv.graphstream.graph.implementations.DefaultGraph;
+import org.miv.graphstream.graph.implementations.MultiGraph;
 
 import static org.junit.Assert.* ;
 
@@ -42,12 +42,18 @@ public class TestAStar
 		TestAStar tas = new TestAStar();
 		
 		tas.setUp();
-//		tas.testAStarNoWeights();
-//		tas.testAStarWeighted1();
-//		tas.testAStarWeighted2();
-//		tas.testAStarDistances1();
+		tas.testAStarNoWeights();
+		tas.setUp();
+		tas.testAStarWeighted1();
+		tas.setUp();
+		tas.testAStarWeighted2();
+		tas.setUp();
+		tas.testAStarDistances1();
+		tas.setUp();
 		tas.testAStarDistances2();
-		tas.graph.display();
+		tas.setUp();
+		tas.testAStarMultiGraph();
+//		tas.graph.display();
 	}
 
 	public Graph graph;
@@ -58,7 +64,9 @@ public class TestAStar
 	@Before
 	public void setUp()
 	{
-		graph = new DefaultGraph( false, true );
+		// Do not forget : called for each test !
+		
+		graph = new MultiGraph( false, true );
 		
 		AB = graph.addEdge( "AB", "A", "B" );
 		BC = graph.addEdge( "BC", "B", "C" );
@@ -294,5 +302,53 @@ public class TestAStar
 		assertTrue( e != null );
 		assertTrue( e.getId().equals( "EF" ) );
 		assertTrue( ! i.hasNext() );		
+	}
+	
+	@Test
+	public void testAStarMultiGraph()
+	{
+		//         C-----D
+		//        /      |
+		// A-----B--+    |
+		//       |\ |    |
+		//       | \|    |
+		//       +--F -- E
+		//
+		// We add two edges between node B and F. There are therefore three edges
+		// one with weight 1, one with weight 2 and one with weight 3.
+		// To further complicate things, the edge BC value is 0.5. All other edges
+		// weight is one.
+		
+		Edge BF1 = graph.getEdge( "BF" ); 
+		Edge BF2 = graph.addEdge( "BF2", "B", "F" );
+		Edge BF3 = graph.addEdge( "BF3", "B", "F" );
+		
+		AB.addAttribute(  "weight", 1f );
+		BF1.addAttribute( "weight", 3f );
+		BF2.addAttribute( "weight", 2f );
+		BF3.addAttribute( "weight", 1f );
+		BC.addAttribute(  "weight", 0.5f );
+		CD.addAttribute(  "weight", 1f );
+		DE.addAttribute(  "weight", 1f );
+		EF.addAttribute(  "weight", 1f );
+		
+		astar.compute( "A", "F" );
+		
+		Path path = astar.getShortestPath();
+		
+		List<Edge> edges = path.getEdgePath();
+		
+		for( Edge edge: edges )
+			edge.addAttribute( "color", "red" );
+		
+		Iterator<? extends Edge> i = edges.iterator();
+		
+		Edge e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "AB" ) );
+		e = i.next();
+		assertTrue( e != null );
+		assertTrue( e.getId().equals( "BF3" ) );
+		assertTrue( ! i.hasNext() );				
 	}
 }

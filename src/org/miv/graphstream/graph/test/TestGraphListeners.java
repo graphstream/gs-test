@@ -198,7 +198,7 @@ public class TestGraphListeners implements GraphListener
     }
 
 	public void edgeAttributeChanged( String graphId, String edgeId, String attribute,
-            Object value )
+            Object oldValue, Object value )
     {
 		events.add( new AttributeEvent( graphId, edgeId, Event.ElementType.EDGE, attribute,
 				AttributeEvent.EventType.CHANGE, value) );
@@ -216,7 +216,7 @@ public class TestGraphListeners implements GraphListener
 				AttributeEvent.EventType.ADD, value) );
     }
 
-	public void graphAttributeChanged( String graphId, String attribute, Object value )
+	public void graphAttributeChanged( String graphId, String attribute, Object oldValue, Object value )
     {
 		events.add( new AttributeEvent( graphId, graphId, Event.ElementType.GRAPH, attribute,
 				AttributeEvent.EventType.CHANGE, value) );
@@ -236,7 +236,7 @@ public class TestGraphListeners implements GraphListener
     }
 
 	public void nodeAttributeChanged( String graphId, String nodeId, String attribute,
-            Object value )
+            Object oldValue, Object value )
     {
 		events.add( new AttributeEvent( graphId, nodeId, Event.ElementType.NODE, attribute,
 				AttributeEvent.EventType.CHANGE, value) );
@@ -272,6 +272,10 @@ public class TestGraphListeners implements GraphListener
 		events.add( new ElementEvent( graphId, nodeId, Event.ElementType.NODE,
 				ElementEvent.EventType.REMOVE ) );
     }
+	
+	public void graphCleared( String graphId )
+	{
+	}
 
 	public void stepBegins( String graphId, double time )
     {

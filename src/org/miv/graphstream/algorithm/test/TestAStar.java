@@ -90,8 +90,8 @@ public class TestAStar
 		//
 		// The shortest path between A and F is therefore A -> B -> F.
 		
-		astar = new AStar();
-		astar.setGraph( graph );
+		astar = new AStar( graph );
+		astar.init( graph );
 		astar.setCosts( new AStar.DefaultCosts( "weight" ) );
 		
 		// With this default costs object, the A* algorithm works like the Dijkstra algorithm.

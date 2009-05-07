@@ -40,7 +40,7 @@ public class TestAStar
 	public static void main( String args[] )
 	{
 		TestAStar tas = new TestAStar();
-		
+	/*	
 		tas.setUp();
 		tas.testAStarNoWeights();
 		tas.setUp();
@@ -51,9 +51,9 @@ public class TestAStar
 		tas.testAStarDistances1();
 		tas.setUp();
 		tas.testAStarDistances2();
-		tas.setUp();
+*/		tas.setUp();
 		tas.testAStarMultiGraph();
-//		tas.graph.display();
+		tas.graph.display();
 	}
 
 	public Graph graph;

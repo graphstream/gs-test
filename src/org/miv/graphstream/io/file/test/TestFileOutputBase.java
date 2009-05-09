@@ -34,7 +34,6 @@ import org.miv.graphstream.graph.Edge;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.Node;
 import org.miv.graphstream.graph.implementations.MultiGraph;
-import org.miv.graphstream.io2.GraphOutput;
 import org.miv.graphstream.io2.file.FileInput;
 import org.miv.graphstream.io2.file.FileOutput;
 
@@ -114,7 +113,7 @@ public abstract class TestFileOutputBase
 		try
 		{
 			output.writeAll( outGraph, aTemporaryGraphFileName() );
-			input.addGraphListener( new GraphOutput( inGraph ) );
+			input.addGraphListener( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -134,7 +133,7 @@ public abstract class TestFileOutputBase
 		try
 		{
 			output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-			input.addGraphListener( new GraphOutput( inGraph ) );
+			input.addGraphListener( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -160,7 +159,7 @@ public abstract class TestFileOutputBase
 			output.edgeAdded( "", "CA", "C", "A", false );
 			output.end();
 
-			input.addGraphListener( new GraphOutput( inGraph ) );
+			input.addGraphListener( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -180,7 +179,7 @@ public abstract class TestFileOutputBase
 		try
 		{
 			output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-			input.addGraphListener( new GraphOutput( inGraph ) );
+			input.addGraphListener( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testDirectedTriangle();
@@ -202,7 +201,7 @@ public abstract class TestFileOutputBase
 			try
 			{
 				output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-				input.addGraphListener( new GraphOutput( inGraph ) );
+				input.addGraphListener( inGraph );
 				input.readAll( aTemporaryGraphFileName() );
 				removeFile( aTemporaryGraphFileName() );
 				testAttributedTriangle();
@@ -244,7 +243,7 @@ public abstract class TestFileOutputBase
 				outGraph.removeEdge( "BC" );
 				output.end();
 				
-				input.addGraphListener( new GraphOutput( inGraph ) );
+				input.addGraphListener( inGraph );
 				input.begin( aTemporaryGraphFileName() );
 				testDynamicTriangleStep0();
 				input.nextStep();

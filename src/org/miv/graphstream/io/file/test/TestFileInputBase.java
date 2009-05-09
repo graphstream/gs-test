@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.miv.graphstream.graph.Edge;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.Node;
-import org.miv.graphstream.io2.GraphOutput;
 import org.miv.graphstream.io2.file.FileInput;
 
 /**
@@ -109,7 +108,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( new StringReader( anUndirectedTriangle() ) );
 			undirectedTriangleTests();
 		}
@@ -125,7 +124,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.begin( new StringReader( anUndirectedTriangle() ) );
 			while( input.nextEvents() );
 			input.end();
@@ -144,7 +143,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( new FileInputStream( anUndirectedTriangleFileName() ) );
 			undirectedTriangleTests();
 		}
@@ -165,7 +164,7 @@ public abstract class TestFileInputBase
 			URLConnection c = url.openConnection();
 			c.setDefaultUseCaches( false );
 			
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( url );
 			undirectedTriangleTests();
 		}
@@ -181,7 +180,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( anUndirectedTriangleFileName() );
 			undirectedTriangleTests();
 		}
@@ -197,7 +196,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( new StringReader( aDirectedTriangle() ) );
 			directedTriangleTests();
 		}
@@ -213,7 +212,7 @@ public abstract class TestFileInputBase
 	{
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( new StringReader( basicAttributes() ) );
 			basicAttributesTests();
 		}

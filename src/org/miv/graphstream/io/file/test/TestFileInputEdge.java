@@ -30,7 +30,6 @@ import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.miv.graphstream.graph.implementations.MultiGraph;
-import org.miv.graphstream.io2.GraphOutput;
 import org.miv.graphstream.io2.file.FileInputEdge;
 
 public class TestFileInputEdge extends TestFileInputBase
@@ -82,7 +81,7 @@ public class TestFileInputEdge extends TestFileInputBase
 		
 		try
 		{
-			input.addGraphListener( new GraphOutput( graph ) );
+			input.addGraphListener( graph );
 			input.readAll( new StringReader( aDirectedTriangle() ) );
 			graph.getNode("B").getEdgeToward("C").setDirected( false );
 			directedTriangleTests();

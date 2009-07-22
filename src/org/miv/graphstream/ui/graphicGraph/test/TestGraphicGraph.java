@@ -325,6 +325,7 @@ public class TestGraphicGraph
 		assertTrue( spriteIds.isEmpty() );
 		
 		// Now remove a sprite.
+
 		sman.removeSprite( "S2" );
 		
 		assertEquals( 1, sman.getSpriteCount() );

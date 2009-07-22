@@ -290,6 +290,24 @@ public class TestElement
 		assertTrue( keys.contains( "C" ) );
 	}
 	
+	@Test
+	public void testNullAttributes()
+	{
+		Graph graph = new MultiGraph();
+		
+		graph.addAttribute( "foo" );
+		graph.addAttribute( "bar", (Object)null );	// Yes an attribute with a null value, You can !
+		
+		assertTrue( graph.hasAttribute( "foo" ) );
+		assertTrue( graph.hasAttribute( "bar" ) );
+		
+		graph.removeAttribute( "foo" );
+		graph.removeAttribute( "bar" );
+		
+		assertFalse( graph.hasAttribute( "foo" ) );
+		assertFalse( graph.hasAttribute( "bar" ) );
+	}
+	
 	protected static class MyAttribute extends HashMap<String,String> implements CompoundAttribute
 	{
         private static final long serialVersionUID = 1L;

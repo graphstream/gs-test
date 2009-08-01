@@ -55,11 +55,13 @@ public class TestGraphSynchronisationProxyThread
 		// the events (elements + attributes). In the direction MultiGraph -> Graph, the graph only
 		// listen at attributes since we do not intend to add elements directly in the multi graph.
 		
-		Graph             graph        = new MultiGraph( "inputGraph" );
-		InTheSwingThread  viewerThread = new InTheSwingThread( new ThreadProxyFilter( graph ) );
-		ThreadProxyFilter ggProxy       = viewerThread.getProxy();
+		Graph             main         = new MultiGraph( "main" );
+		ThreadProxyFilter toGraphic    = new ThreadProxyFilter( main );
+		InTheSwingThread  viewerThread = new InTheSwingThread( toGraphic );
+		ThreadProxyFilter toMain       = viewerThread.getProxy();
 		
-		ggProxy.addGraphAttributesListener( graph );	// Get the graphic graph proxy.
+		toMain.addAttributesSynchro( main, toGraphic );
+		toMain.addGraphAttributesListener( main );	// Get the graphic graph proxy.
 		
 		// Now launch the graphic graph in the Swing thread using a Swing Timer.
 
@@ -67,14 +69,14 @@ public class TestGraphSynchronisationProxyThread
 		
 		// We modify the graph in the main thread.
 		
-		Node A = graph.addNode( "A" );
-		Node B = graph.addNode( "B" );
-		Node C = graph.addNode( "C" );
-		graph.addEdge( "AB", "A", "B" );
-		graph.addEdge( "BC", "B", "C" );
-		graph.addEdge( "CA", "C", "A" );
+		Node A = main.addNode( "A" );
+		Node B = main.addNode( "B" );
+		Node C = main.addNode( "C" );
+		main.addEdge( "AB", "A", "B" );
+		main.addEdge( "BC", "B", "C" );
+		main.addEdge( "CA", "C", "A" );
 		
-		SpriteManager sman = new SpriteManager( graph );
+		SpriteManager sman = new SpriteManager( main );
 		Sprite S1 = sman.addSprite( "S1" );
 		Sprite S2 = sman.addSprite( "S2" );
 
@@ -83,34 +85,34 @@ public class TestGraphSynchronisationProxyThread
 		C.addAttribute( "truc" );			// Not prefixed by UI, will not pass.
 		S1.addAttribute( "ui.foo", "bar" );
 		
-		ggProxy.checkEvents();
+		toMain.checkEvents();
 		
 		// We ask the Swing thread to modify the graphic graph.
 		
-		graph.addAttribute( "ui.EQUIP" );	// Remember GraphicGraph filters attributes.
+		main.addAttribute( "ui.EQUIP" );	// Remember GraphicGraph filters attributes.
 
 		// Wait and stop.
 
-		ggProxy.checkEvents();
+		toMain.checkEvents();
 		sleep( 1000 );
-		ggProxy.checkEvents();
+		toMain.checkEvents();
 		
-		graph.addAttribute( "ui.STOP" );
+		main.addAttribute( "ui.STOP" );
 		
-		ggProxy.checkEvents();
+		toMain.checkEvents();
 		sleep( 1000 );
-		ggProxy.checkEvents();
+		toMain.checkEvents();
 
 		// ****************************************************************************************
 		// Now we can begin the real test. We ensure the timer in the Swing graph stopped and check
 		// If the two graphs (main and graphic) synchronised correctly.
 		
-		GraphicGraph ggraph = viewerThread.graphicGraph;
+		GraphicGraph ggraph = viewerThread.graphic;
 		
 		assertTrue( viewerThread.isStopped() );
-		assertFalse( graph.hasAttribute( "ui.EQUIP" ) );
+		assertFalse( main.hasAttribute( "ui.EQUIP" ) );
 		assertFalse( ggraph.hasAttribute( "ui.EQUIP" ) );
-		assertTrue( graph.hasAttribute( "ui.STOP" ) );
+		assertTrue( main.hasAttribute( "ui.STOP" ) );
 		assertTrue( ggraph.hasAttribute( "ui.STOP" ) );
 		
 		// Assert all events passed toward the graphic graph. 
@@ -137,9 +139,9 @@ public class TestGraphSynchronisationProxyThread
 		Object xyz2[] = { new Float(2), new Float(1), new Float(0) };
 		Object xyz3[] = { new Float(3), new Float(2), new Float(1) };
 		
-		assertArrayEquals( xyz1, (Object[])graph.getNode("A").getAttribute("xyz") );
-		assertArrayEquals( xyz2, (Object[])graph.getNode("B").getAttribute("xyz") );
-		assertArrayEquals( xyz3, (Object[])graph.getNode("C").getAttribute("xyz") );
+		assertArrayEquals( xyz1, (Object[])main.getNode("A").getAttribute("xyz") );
+		assertArrayEquals( xyz2, (Object[])main.getNode("B").getAttribute("xyz") );
+		assertArrayEquals( xyz3, (Object[])main.getNode("C").getAttribute("xyz") );
 
 		assertEquals( "foobar", S2.getAttribute( "ui.foobar" ) );
 		
@@ -161,21 +163,21 @@ public class TestGraphSynchronisationProxyThread
  */
 public static class InTheSwingThread implements ActionListener
 {
-	protected ThreadProxyFilter inputProxy;
+	protected ThreadProxyFilter fromMain;
 	
-	protected GraphicGraph graphicGraph;
+	protected GraphicGraph graphic;
 	
 	protected Timer timer;
 	
 	public InTheSwingThread( ThreadProxyFilter input )
 	{
-		inputProxy   = input;
-		graphicGraph = new GraphicGraph();
-		timer        = new Timer( 40, this ); 
+		fromMain = input;
+		graphic  = new GraphicGraph();
+		timer    = new Timer( 40, this ); 
 		
 		timer.setRepeats( true );
 		timer.setCoalesce( true );
-		input.addGraphListener( graphicGraph );
+		input.addGraphListener( graphic );
 	}
 
 	public void start()
@@ -190,17 +192,17 @@ public static class InTheSwingThread implements ActionListener
 	
 	public void actionPerformed( ActionEvent e )
     {
-		inputProxy.checkEvents();
+		fromMain.checkEvents();
 		
 		// We wait for some attributes to be added. Such events trigger actions that modify
 		// the graphic graph and should be propagated (synchronised) to the main graph.
 		// When we encounter the "ui.STOP" event we stop the timer.
 		
-		if( graphicGraph.hasAttribute( "ui.EQUIP" ) )
+		if( graphic.hasAttribute( "ui.EQUIP" ) )
 		{
-			Node A = graphicGraph.getNode( "A" );
-			Node B = graphicGraph.getNode( "B" );
-			Node C = graphicGraph.getNode( "C" );
+			Node A = graphic.getNode( "A" );
+			Node B = graphic.getNode( "B" );
+			Node C = graphic.getNode( "C" );
 			
 			if( A != null )
 				A.addAttribute( "xyz", 4, 3, 2 );
@@ -209,8 +211,8 @@ public static class InTheSwingThread implements ActionListener
 			if( C != null )
 				C.addAttribute( "xyz", 3, 2, 1 );
 			
-			GraphicSprite S1 = graphicGraph.getSprite( "S1" );
-			GraphicSprite S2 = graphicGraph.getSprite( "S2" );
+			GraphicSprite S1 = graphic.getSprite( "S1" );
+			GraphicSprite S2 = graphic.getSprite( "S2" );
 			
 			if( S2 != null )
 			{
@@ -221,17 +223,22 @@ public static class InTheSwingThread implements ActionListener
 			if( S1 != null )
 				S1.setPosition( 0.5f );
 			
-			graphicGraph.removeAttribute( "ui.EQUIP" );
+			graphic.removeAttribute( "ui.EQUIP" );
 		}
-		else if( graphicGraph.hasAttribute( "ui.STOP" ) )
+		else if( graphic.hasAttribute( "ui.STOP" ) )
 		{
 			timer.stop();
+System.err.printf( "STOP!%n" );
 		}
     }
 	
 	public ThreadProxyFilter getProxy()
 	{
-		return new ThreadProxyFilter( graphicGraph );
+		ThreadProxyFilter toMain = new ThreadProxyFilter( graphic );
+
+		fromMain.addAttributesSynchro( graphic, toMain );
+		
+		return toMain;
 	}
 }
 }

@@ -41,11 +41,13 @@ public class TestViewer
 	
 	public TestViewer()
 	{
-		Graph       graph     = new MultiGraph( "main graph" );
-		Viewer      viewer    = new Viewer( new ThreadProxyFilter( graph ) );
-		ProxyFilter fromSwing = viewer.getThreadProxyOnGraphicGraph();
+		Graph             graph     = new MultiGraph( "main graph" );
+		ThreadProxyFilter toSwing   = new ThreadProxyFilter( graph );
+		Viewer            viewer    = new Viewer( toSwing );
+		ProxyFilter       fromSwing = viewer.getThreadProxyOnGraphicGraph();
 		
 		fromSwing.addGraphAttributesListener( graph );
+		((ThreadProxyFilter)fromSwing).addAttributesSynchro( graph, toSwing );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );
@@ -62,16 +64,37 @@ public class TestViewer
 		
 		graph.addAttribute( "ui.stylesheet", styleSheet );
 		
-		boolean loop = true;
+		boolean loop  = true;
+		float   color = 0;
+		float   dir   = 0.01f;
 		
 		while( loop )
 		{
-			try { Thread.sleep( 200 ); } catch( InterruptedException e ) { e.printStackTrace(); }
+			try { Thread.sleep( 100 ); } catch( InterruptedException e ) { e.printStackTrace(); }
 			
 			fromSwing.checkEvents();
 			
 			if( graph.hasAttribute( "ui.viewClosed" ) )
-				loop  = false;
+			{
+				loop = false;
+			}
+			else
+			{
+				color += dir;
+				
+				if( color > 1 )
+				{
+					color = 1;
+					dir = -dir;
+				}
+				else if( color < 0 )
+				{
+					color = 0;
+					dir = -dir;
+				}
+				
+				A.setAttribute( "ui.color", color );
+			}
 		}
 		
 		System.out.printf( "Bye bye ...%n" );
@@ -79,5 +102,8 @@ public class TestViewer
 	}
 	
 	protected static String styleSheet =
-		"graph { padding : 20px; stroke-width: 0px; }";
+		"graph         { padding : 20px; stroke-width: 0px; }" +
+		"node:selected { fill-color:red; fill-mode: plain; }" +
+		"node:clicked  { fill-color:blue; fill-mode: plain; }" +
+		"node#A        { fill-color: green, yellow, purple; fill-mode: dyn-plain; }";
 }

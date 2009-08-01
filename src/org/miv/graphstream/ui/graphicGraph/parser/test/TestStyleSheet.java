@@ -22,11 +22,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.miv.graphstream.graph.Edge;
+import org.miv.graphstream.graph.Element;
 import org.miv.graphstream.graph.Graph;
 import org.miv.graphstream.graph.Node;
 import org.miv.graphstream.graph.implementations.DefaultGraph;
 import org.miv.graphstream.ui2.graphicGraph.StyleGroup;
 import org.miv.graphstream.ui2.graphicGraph.StyleGroupSet;
+import org.miv.graphstream.ui2.graphicGraph.StyleGroup.ElementEvents;
 import org.miv.graphstream.ui2.graphicGraph.stylesheet.Rule;
 import org.miv.graphstream.ui2.graphicGraph.stylesheet.Style;
 import org.miv.graphstream.ui2.graphicGraph.stylesheet.StyleSheet;
@@ -259,17 +261,19 @@ public class TestStyleSheet
         
         populateGroupSet( sgs );
 
-        Style sA = sgs.getStyleForElement( A );
-        Style sB = sgs.getStyleForElement( B );
-        Style sC = sgs.getStyleForElement( C );
-        Style sD = sgs.getStyleForElement( D );
+        StyleGroup sA = sgs.getStyleForElement( A );
+        StyleGroup sB = sgs.getStyleForElement( B );
+        StyleGroup sC = sgs.getStyleForElement( C );
+        StyleGroup sD = sgs.getStyleForElement( D );
         
         assertEquals( 1, sA.getStrokeWidth().value );
         assertEquals( 1, sB.getStrokeWidth().value );
         assertEquals( 1, sC.getStrokeWidth().value );
         assertEquals( 1, sD.getStrokeWidth().value );
        
-        sgs.pushEvent( "clicked" );
+        // Test global events (events that apply to a whole group or groups).
+        
+        sgs.pushEvent( "clicked" );		// This is normally done automatically by the GraphicElement
 
         sA = sgs.getStyleForElement( A );
         sB = sgs.getStyleForElement( B );
@@ -281,7 +285,7 @@ public class TestStyleSheet
         assertEquals( 3, sC.getStrokeWidth().value );
         assertEquals( 3, sD.getStrokeWidth().value );
         
-        sgs.popEvent( "clicked" );
+        sgs.popEvent( "clicked" );		// This is normally done automatically by the GraphicElement
 
         sA = sgs.getStyleForElement( A );
         sB = sgs.getStyleForElement( B );
@@ -293,8 +297,8 @@ public class TestStyleSheet
         assertEquals( 1, sC.getStrokeWidth().value );
         assertEquals( 1, sD.getStrokeWidth().value );
         
-        sgs.pushEvent( "clicked" );
-        sgs.pushEvent( "selected" );
+        sgs.pushEvent( "clicked" );		// Both events at a time.
+        sgs.pushEvent( "selected" );	// They should cascade.
 
         sA = sgs.getStyleForElement( A );
         sB = sgs.getStyleForElement( B );
@@ -305,6 +309,72 @@ public class TestStyleSheet
         assertEquals( 3, sB.getStrokeWidth().value );
         assertEquals( 3, sC.getStrokeWidth().value );
         assertEquals( 3, sD.getStrokeWidth().value );
+     
+        sgs.popEvent( "clicked" );		// This is normally done automatically by the GraphicElement
+        sgs.popEvent( "selected" );		// This is normally done automatically by the GraphicElement
+        
+        // Now test individual events, that is events that apply to
+        // an individual element only.
+
+        sA = sgs.getStyleForElement( A );
+        
+        assertFalse( sA.hasEventElements() );
+        
+        sgs.pushEventFor( A, "clicked" );		// This is normally done automatically by the GraphicElement
+        sgs.pushEventFor( B, "clicked" );		// This is normally done automatically by the GraphicElement
+        
+        sA = sgs.getStyleForElement( A );
+        sB = sgs.getStyleForElement( B );
+        sC = sgs.getStyleForElement( C );
+        sD = sgs.getStyleForElement( D );
+
+        assertTrue( sA.hasEventElements() );
+
+        assertEquals( 1, sA.getStrokeWidth().value );	// Individual events must be activated
+        assertEquals( 1, sB.getStrokeWidth().value );	// to work, so just pushing them is not
+        assertEquals( 1, sC.getStrokeWidth().value );	// sufficient.
+        assertEquals( 1, sD.getStrokeWidth().value );
+        
+        sA.activateEventsFor( A );
+        assertEquals( 2, sA.getStrokeWidth().value );	// Only A should change.
+        assertEquals( 1, sB.getStrokeWidth().value );
+        assertEquals( 1, sC.getStrokeWidth().value );
+        assertEquals( 1, sD.getStrokeWidth().value );
+        sA.deactivateEvents();
+        sB.activateEventsFor( B );
+        assertEquals( 1, sA.getStrokeWidth().value );
+        assertEquals( 3, sB.getStrokeWidth().value );	// B and all its group change.
+        assertEquals( 3, sC.getStrokeWidth().value );	// Therefore C also changes.
+        assertEquals( 1, sD.getStrokeWidth().value );
+        sB.deactivateEvents();
+        
+        sgs.popEventFor( A, "clicked" );		// This is normally done automatically by the GraphicElement
+        sgs.popEventFor( B, "clicked" );		// This is normally done automatically by the GraphicElement
+        
+        // Now two individual events at a time.
+        
+        sgs.pushEventFor( A, "clicked" );		// This is normally done automatically by the GraphicElement
+        sgs.pushEventFor( A, "selected" );		// This is normally done automatically by the GraphicElement
+        
+        sA = sgs.getStyleForElement( A );
+        sB = sgs.getStyleForElement( B );
+        sC = sgs.getStyleForElement( C );
+        sD = sgs.getStyleForElement( D );
+
+        assertEquals( 1, sA.getStrokeWidth().value );	// Individual events must be activated
+        assertEquals( 1, sB.getStrokeWidth().value );	// to work, so just pushing them is not
+        assertEquals( 1, sC.getStrokeWidth().value );	// sufficient.
+        assertEquals( 1, sD.getStrokeWidth().value );
+        
+        sA.activateEventsFor( A );
+        assertEquals( 4, sA.getStrokeWidth().value );	// Only A should change, "selected" has
+        assertEquals( 1, sB.getStrokeWidth().value );	// precedence over "clicked" since added
+        assertEquals( 1, sC.getStrokeWidth().value );	// after.
+        assertEquals( 1, sD.getStrokeWidth().value );
+        sA.deactivateEvents();
+        
+        sgs.popEventFor( A, "clicked" );		// This is normally done automatically by the GraphicElement
+        sgs.popEventFor( A, "selected" );		// This is normally done automatically by the GraphicElement
         
         sgs.release();
 	}
@@ -686,6 +756,92 @@ public class TestStyleSheet
         }
         
         assertTrue( count == 4 );	// Three node groups, plus one edge group (e_AB)
+	}
+
+	public static String styleSheet10 =
+		"node.foo { fill-mode: dyn-plain; fill-color: red, green, blue; }";
+	
+	@Test
+	public void testStyleGroupIterators()
+	{
+		try { stylesheet.parseFromString( styleSheet10 ); } catch( IOException e ) { assertFalse( true ); }
+
+        StyleGroupSet sgs = new StyleGroupSet( stylesheet );
+        
+        populateGroupSet( sgs );
+
+        StyleGroup sA = sgs.getStyleForElement( A );
+        StyleGroup sB = sgs.getStyleForElement( B );
+        StyleGroup sC = sgs.getStyleForElement( C );
+        StyleGroup sD = sgs.getStyleForElement( D );
+        
+        // First test the basic iterator. B and C should be in the same group.
+        
+        assertTrue( sB == sC );		// B and C are in the same group.
+        assertFalse( sA == sB );
+        assertFalse( sB == sD );
+        
+        HashSet<String> expected = new HashSet<String>();
+        
+        expected.add( "B" );
+        expected.add( "C" );
+        
+        for( Element element: sB )
+        {
+        	assertTrue( expected.contains( element.getId() ) );
+        	expected.remove( element.getId() );
+        }
+        
+        assertEquals( 0, expected.size() );
+        
+        // Now test the fact
+        
+        B.addAttribute( "ui.color", 2 );
+        sgs.pushEventFor( B, "clicked" );	// This is normally done automatically by the GraphicElement
+        sgs.pushElementAsDynamic( B );		// This is normally done automatically by the GraphicElement
+        sA = sgs.getStyleForElement( A );
+        sB = sgs.getStyleForElement( B );
+        sC = sgs.getStyleForElement( C );
+        sD = sgs.getStyleForElement( D );
+        assertTrue( sB == sC );		// B and C are still in the same group.
+        assertFalse( sA == sB );
+        assertFalse( sB == sD );
+        assertTrue( sB.elementHasEvents( B ) );
+        assertTrue( sB.elementIsDynamic( B ) );
+        
+        expected.add( "B" );
+        
+        for( Element element: sB.dynamicElements() )
+        {
+        	assertTrue( expected.contains( element.getId() ) );
+        	expected.remove( element.getId() );
+        }
+        
+        assertEquals( 0, expected.size() );
+        
+        expected.add( "B" );
+        
+        for( ElementEvents events: sB.elementsEvents() )
+        {
+        	assertTrue( expected.contains( events.getElement().getId() ) );
+        	assertEquals( 1, events.events().length );
+        	assertEquals( "clicked", events.events()[0] );
+        	expected.remove( events.getElement().getId() );
+        }
+        
+        assertEquals( 0, expected.size() );
+        
+        expected.add( "C" );
+        
+        for( Element element: sB.bulkElements() )
+        {
+        	assertTrue( expected.contains( element.getId() ) );
+        	expected.remove( element.getId() );
+        }
+        
+        assertEquals( 0, expected.size() );
+        
+        sgs.popEventFor( B, "clicked" );
 	}
 	
 	public static String styleSheet5 =

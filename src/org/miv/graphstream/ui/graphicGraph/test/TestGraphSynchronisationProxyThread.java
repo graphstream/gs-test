@@ -60,7 +60,7 @@ public class TestGraphSynchronisationProxyThread
 		InTheSwingThread  viewerThread = new InTheSwingThread( toGraphic );
 		ThreadProxyFilter toMain       = viewerThread.getProxy();
 		
-		toMain.addAttributesSynchro( main, toGraphic );
+		toMain.synchronizeWith( toGraphic, main );
 		toMain.addGraphAttributesListener( main );	// Get the graphic graph proxy.
 		
 		// Now launch the graphic graph in the Swing thread using a Swing Timer.
@@ -107,31 +107,32 @@ public class TestGraphSynchronisationProxyThread
 		// Now we can begin the real test. We ensure the timer in the Swing graph stopped and check
 		// If the two graphs (main and graphic) synchronised correctly.
 		
-		GraphicGraph ggraph = viewerThread.graphic;
+		GraphicGraph graphic = viewerThread.graphic;
 		
 		assertTrue( viewerThread.isStopped() );
 		assertFalse( main.hasAttribute( "ui.EQUIP" ) );
-		assertFalse( ggraph.hasAttribute( "ui.EQUIP" ) );
+		assertFalse( graphic.hasAttribute( "ui.EQUIP" ) );
 		assertTrue( main.hasAttribute( "ui.STOP" ) );
-		assertTrue( ggraph.hasAttribute( "ui.STOP" ) );
+		assertTrue( graphic.hasAttribute( "ui.STOP" ) );
 		
 		// Assert all events passed toward the graphic graph. 
 		
-		assertEquals( 3, ggraph.getNodeCount() );
-		assertEquals( 3, ggraph.getEdgeCount() );
-		assertEquals( 2, ggraph.getSpriteCount() );
-		assertNotNull( ggraph.getNode( "A" ) );
-		assertNotNull( ggraph.getNode( "B" ) );
-		assertNotNull( ggraph.getNode( "C" ) );
-		assertNotNull( ggraph.getEdge( "AB" ) );
-		assertNotNull( ggraph.getEdge( "BC" ) );
-		assertNotNull( ggraph.getEdge( "CA" ) );
-		assertNotNull( ggraph.getSprite( "S1" ) );
-		assertNotNull( ggraph.getSprite( "S2" ) );
-		assertEquals( "bar", ggraph.getNode("A").getAttribute( "ui.foo" ) );
-		assertEquals( "foo", ggraph.getNode("B").getAttribute( "ui.bar" ) );
-		assertNull( ggraph.getNode("C").getAttribute( "truc" ) );	// Should not pass the attribute filter.
-		assertEquals( "bar", ggraph.getSprite("S1").getAttribute( "ui.foo" ) );
+		assertEquals( 3, graphic.getNodeCount() );
+		assertEquals( 3, graphic.getEdgeCount() );
+		assertEquals( 2, graphic.getSpriteCount() );
+		assertNotNull( graphic.getNode( "A" ) );
+		assertNotNull( graphic.getNode( "B" ) );
+		assertNotNull( graphic.getNode( "C" ) );
+		assertNotNull( graphic.getEdge( "AB" ) );
+		assertNotNull( graphic.getEdge( "BC" ) );
+		assertNotNull( graphic.getEdge( "CA" ) );
+		assertNotNull( graphic.getSprite( "S1" ) );
+		assertNotNull( graphic.getSprite( "S2" ) );
+		assertEquals( "bar", graphic.getNode("A").getAttribute( "ui.foo" ) );
+		assertEquals( "foo", graphic.getNode("B").getAttribute( "ui.bar" ) );
+		assertNull( graphic.getNode("C").getAttribute( "truc" ) );	// Should not pass the attribute filter.
+		assertEquals( "bar", graphic.getSprite("S1").getAttribute( "ui.foo" ) );
+		assertEquals( "bar", sman.getSprite("S1").getAttribute( "ui.foo" ) );
 		
 		// Assert attributes passed back to the graph from the graphic graph.
 		
@@ -228,7 +229,7 @@ public static class InTheSwingThread implements ActionListener
 		else if( graphic.hasAttribute( "ui.STOP" ) )
 		{
 			timer.stop();
-System.err.printf( "STOP!%n" );
+//System.err.printf( "STOP!%n" );
 		}
     }
 	
@@ -236,7 +237,7 @@ System.err.printf( "STOP!%n" );
 	{
 		ThreadProxyFilter toMain = new ThreadProxyFilter( graphic );
 
-		fromMain.addAttributesSynchro( graphic, toMain );
+		fromMain.synchronizeWith( toMain, graphic );
 		
 		return toMain;
 	}

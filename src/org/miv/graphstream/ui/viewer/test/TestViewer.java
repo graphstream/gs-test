@@ -47,7 +47,7 @@ public class TestViewer
 		ProxyFilter       fromSwing = viewer.getThreadProxyOnGraphicGraph();
 		
 		fromSwing.addGraphAttributesListener( graph );
-		((ThreadProxyFilter)fromSwing).addAttributesSynchro( graph, toSwing );
+		((ThreadProxyFilter)fromSwing).synchronizeWith( toSwing, graph );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );
@@ -94,11 +94,38 @@ public class TestViewer
 				}
 				
 				A.setAttribute( "ui.color", color );
+
+				showSelection( graph );
 			}
 		}
 		
 		System.out.printf( "Bye bye ...%n" );
 		System.exit( 0 );
+	}
+
+	protected void showSelection( Graph graph )
+	{
+		boolean       selection = false;
+		StringBuilder sb        = new StringBuilder();
+		
+		sb.append( "[" );
+		
+		for( Node node: graph )
+		{
+			if( node.hasAttribute( "ui.selected" ) )
+			{
+				sb.append( String.format( " %s", node.getId() ) );
+				selection = true;
+			}
+			if( node.hasAttribute( "ui.clicked" ) )
+			{
+				System.err.printf( "node %s clicked%n", node.getId() );
+			}
+		}
+		sb.append( " ]" );
+
+		if( selection )
+			System.err.printf( "selection = %s%n", sb.toString() );
 	}
 	
 	protected static String styleSheet =

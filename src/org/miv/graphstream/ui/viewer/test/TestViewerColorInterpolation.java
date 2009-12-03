@@ -32,14 +32,14 @@ import org.miv.graphstream.ui2.swingViewer.Viewer;
 /**
  * Test the viewer.
  */
-public class TestViewer
+public class TestViewerColorInterpolation
 {
 	public static void main( String args[] )
 	{
-		new TestViewer();
+		new TestViewerColorInterpolation();
 	}
 	
-	public TestViewer()
+	public TestViewerColorInterpolation()
 	{
 		Graph             graph     = new MultiGraph( "main graph" );
 		ThreadProxyFilter toSwing   = new ThreadProxyFilter( graph );
@@ -122,6 +122,7 @@ public class TestViewer
 				System.err.printf( "node %s clicked%n", node.getId() );
 			}
 		}
+
 		sb.append( " ]" );
 
 		if( selection )
@@ -129,8 +130,8 @@ public class TestViewer
 	}
 	
 	protected static String styleSheet =
-		"graph         { padding : 20px; stroke-width: 0px; }" +
-		"node:selected { fill-color:red; fill-mode: plain; }" +
-		"node:clicked  { fill-color:blue; fill-mode: plain; }" +
+		"graph         { padding: 20px; stroke-width: 0px; }" +
+		"node:selected { fill-color: red;  fill-mode: plain; }" +
+		"node:clicked  { fill-color: blue; fill-mode: plain; }" +
 		"node#A        { fill-color: green, yellow, purple; fill-mode: dyn-plain; }";
 }

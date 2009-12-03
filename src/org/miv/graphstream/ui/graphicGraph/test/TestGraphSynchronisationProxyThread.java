@@ -79,16 +79,23 @@ public class TestGraphSynchronisationProxyThread
 		SpriteManager sman = new SpriteManager( main );
 		Sprite S1 = sman.addSprite( "S1" );
 		Sprite S2 = sman.addSprite( "S2" );
+		Sprite S3 = sman.addSprite( "S3" );
 
+		S3.setPosition( 1, 2, 2 );
+		S3.setPosition( 2, 3, 2 );
+		S3.setPosition( 3, 2, 1 );
+		
 		A.addAttribute( "ui.foo", "bar" );
 		B.addAttribute( "ui.bar", "foo" );
 		C.addAttribute( "truc" );			// Not prefixed by UI, will not pass.
 		S1.addAttribute( "ui.foo", "bar" );
+		main.stepBegins( 1 );
 		
 		toMain.checkEvents();
 		
 		// We ask the Swing thread to modify the graphic graph.
 		
+		main.stepBegins( 2 );
 		main.addAttribute( "ui.EQUIP" );	// Remember GraphicGraph filters attributes.
 
 		// Wait and stop.
@@ -115,11 +122,14 @@ public class TestGraphSynchronisationProxyThread
 		assertTrue( main.hasAttribute( "ui.STOP" ) );
 		assertTrue( graphic.hasAttribute( "ui.STOP" ) );
 		
+		assertEquals( 3, graphic.getStep() );
+		assertEquals( 2, main.getStep() );		// We do not listen at elements events the step 3
+												// of the graphic graph did not reached us.
 		// Assert all events passed toward the graphic graph. 
 		
 		assertEquals( 3, graphic.getNodeCount() );
 		assertEquals( 3, graphic.getEdgeCount() );
-		assertEquals( 2, graphic.getSpriteCount() );
+		assertEquals( 3, graphic.getSpriteCount() );
 		assertNotNull( graphic.getNode( "A" ) );
 		assertNotNull( graphic.getNode( "B" ) );
 		assertNotNull( graphic.getNode( "C" ) );
@@ -146,12 +156,18 @@ public class TestGraphSynchronisationProxyThread
 
 		assertEquals( "foobar", S2.getAttribute( "ui.foobar" ) );
 		
+		GraphicSprite gs3 = graphic.getSprite( "S3" );
+		
 		assertEquals( 0.5f, S1.getX() );
 		assertEquals( 0,    S1.getY() );
 		assertEquals( 0,    S1.getZ() );
 		assertEquals( 1,    S2.getX() );
 		assertEquals( 2,    S2.getY() );
 		assertEquals( 3,    S2.getZ() );
+		
+		assertEquals( 3, gs3.getX() );
+		assertEquals( 2, gs3.getY() );
+		assertEquals( 1, gs3.getZ() );
 	}
 
 	protected void sleep( int millis )
@@ -225,6 +241,7 @@ public static class InTheSwingThread implements ActionListener
 				S1.setPosition( 0.5f );
 			
 			graphic.removeAttribute( "ui.EQUIP" );
+			graphic.stepBegins( 3 );
 		}
 		else if( graphic.hasAttribute( "ui.STOP" ) )
 		{

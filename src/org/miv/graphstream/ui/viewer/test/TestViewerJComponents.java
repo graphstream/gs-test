@@ -48,7 +48,6 @@ public class TestViewerJComponents
 		SpriteManager     sman      = new SpriteManager( graph );
 		
 		fromSwing.addGraphAttributesListener( graph );
-		fromSwing.synchronizeWith( toSwing, graph );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );

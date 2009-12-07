@@ -47,7 +47,6 @@ public class TestViewerColorInterpolation
 		ProxyFilter       fromSwing = viewer.getThreadProxyOnGraphicGraph();
 		
 		fromSwing.addGraphAttributesListener( graph );
-		((ThreadProxyFilter)fromSwing).synchronizeWith( toSwing, graph );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );

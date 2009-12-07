@@ -461,7 +461,6 @@ public class TestGraphicGraph
 		inGraph  = new MultiGraph( "input graph" );
 		outGraph = new GraphicGraph();
 		
-		inGraph.setStrict( false );				// Absolutely needed for syncrhonisation to work.
 		inGraph.addGraphListener( outGraph );
 		outGraph.addGraphListener( inGraph );	// You can do this !! We are careful to recursive calls !!!
 		

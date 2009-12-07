@@ -39,9 +39,9 @@ public class TestGraph
 	@Test
 	public void testBasic()
 	{
-		testBasic( new SingleGraph() );
-		testBasic( new MultiGraph() );
-		testBasic( new AdjacencyListGraph() );
+		testBasic( new SingleGraph( "sg" ) );
+		testBasic( new MultiGraph( "mg" ) );
+//		testBasic( new AdjacencyListGraph( "alg" ) );
 	}
 	
 	protected void testBasic( Graph graph )
@@ -152,9 +152,9 @@ public class TestGraph
 	@Test
 	public void testDirected()
 	{
-		testDirected( new SingleGraph() );
-		testDirected( new MultiGraph() );
-		testDirected( new AdjacencyListGraph() );
+		testDirected( new SingleGraph( "sg" ) );
+		testDirected( new MultiGraph( "mg" ) );
+//		testDirected( new AdjacencyListGraph( "alg" ) );
 	}
 	
 	protected void testDirected( Graph graph )
@@ -250,9 +250,9 @@ public class TestGraph
 	@Test
 	public void testIterables()
 	{
-		testIterables( new SingleGraph() );
-		testIterables( new MultiGraph() );
-		testIterables( new AdjacencyListGraph() );		
+		testIterables( new SingleGraph( "sg" ) );
+		testIterables( new MultiGraph( "mg" ) );
+//		testIterables( new AdjacencyListGraph( "alg" ) );		
 	}
 	
 	protected void testIterables( Graph graph )
@@ -388,9 +388,9 @@ public class TestGraph
 	@Test
 	public void testRemoval()
 	{
-		testRemoval( new SingleGraph() );
-		testRemoval( new MultiGraph() );
-		testRemoval( new AdjacencyListGraph() );				
+		testRemoval( new SingleGraph( "sg" ) );
+		testRemoval( new MultiGraph( "mg" ) );
+//		testRemoval( new AdjacencyListGraph( "alg" ) );				
 	}
 	
 	public void testRemoval( Graph graph )
@@ -467,5 +467,72 @@ public class TestGraph
 		
 		assertEquals( 0, graph.getNodeCount() );
 		assertEquals( 0, graph.getEdgeCount() );
+	}
+	
+	@Test
+	public void testGraphListener()
+	{
+		testGraphListener( new SingleGraph( "sg" ) );
+		testGraphListener( new MultiGraph( "mg" ) );
+//		testGraphListener( new AdjacencyListGraph( "alg" ) );				
+	}
+	
+	protected void testGraphListener( Graph input )
+	{
+		// We create a second graph (output) to receive the events of the first (input).
+		// We populate (or remove elements from) the input and check the output to see
+		// if it is a copy of the input.
+		
+		Graph output = new MultiGraph( "outout" );
+		
+		input.addGraphListener( output );
+		
+		Node A = input.addNode( "A" );
+		input.addNode( "B" );
+		input.addNode( "C" );
+		
+		input.addEdge( "AB", "A", "B" );
+		Edge BC = input.addEdge( "BC", "B", "C" );
+		input.addEdge( "CA", "C", "A" );
+		
+		A.addAttribute( "foo", "bar" );
+		BC.addAttribute( "foo", "bar" );
+		
+		assertEquals( 3, input.getNodeCount() );
+		assertEquals( 3, output.getNodeCount() );
+		assertEquals( 3, input.getEdgeCount() );
+		assertEquals( 3, output.getEdgeCount() );
+		
+		assertNotNull( output.getNode( "A" ) );
+		assertNotNull( output.getNode( "B" ) );
+		assertNotNull( output.getNode( "C" ) );
+		assertNotNull( output.getEdge( "AB" ) );
+		assertNotNull( output.getEdge( "BC" ) );
+		assertNotNull( output.getEdge( "CA" ) );
+		
+		assertEquals( "bar", output.getNode("A").getAttribute( "foo" ) );
+		assertEquals( "bar", output.getEdge("BC").getAttribute( "foo" ) );
+		
+		// Now remove an attribute.
+		
+		A.removeAttribute( "foo" );
+		
+		assertFalse( output.hasAttribute( "foo" ) );
+		
+		// Now remove a node.
+		
+		input.removeNode( "A" );
+		
+		assertEquals( 2, input.getNodeCount() );
+		assertEquals( 1, input.getEdgeCount() );
+		assertEquals( 2, output.getNodeCount() );
+		assertEquals( 1, output.getEdgeCount() );
+		
+		// Now check that attribute change works.
+		
+		BC.changeAttribute( "foo", "truc" );
+		
+		assertEquals( "truc", BC.getAttribute( "foo" ) );
+		assertEquals( "truc", output.getEdge("BC").getAttribute( "foo" ) );
 	}
 }

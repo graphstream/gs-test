@@ -51,16 +51,17 @@ public class TestGraphSynchronisationProxyThread
 		// Here a Graph is created in this thread and another thread is created with a GraphicGraph.
 		// The two graphs being in separate threads we use thread proxies filters to pass
 		// informations between the two. Once again we will use synchronisation (the two graphs
-		// listen at each other). In the direction Graph -> MultiGraph the multigraph listens at ALL
-		// the events (elements + attributes). In the direction MultiGraph -> Graph, the graph only
-		// listen at attributes since we do not intend to add elements directly in the multi graph.
+		// listen at each other). In the direction Graph -> GraphicGraph the graphic graph listens
+		// at ALL the events (elements + attributes). In the direction GraphicGraph -> Graph, the
+		// graph only listen at attributes since we do not intend to add elements directly in the
+		// graphic graph.
 		
 		Graph             main         = new MultiGraph( "main" );
 		ThreadProxyFilter toGraphic    = new ThreadProxyFilter( main );
 		InTheSwingThread  viewerThread = new InTheSwingThread( toGraphic );
 		ThreadProxyFilter toMain       = viewerThread.getProxy();
 		
-		toMain.synchronizeWith( toGraphic, main );
+//		toMain.synchronizeWith( toGraphic, main );
 		toMain.addGraphAttributesListener( main );	// Get the graphic graph proxy.
 		
 		// Now launch the graphic graph in the Swing thread using a Swing Timer.
@@ -254,7 +255,7 @@ public static class InTheSwingThread implements ActionListener
 	{
 		ThreadProxyFilter toMain = new ThreadProxyFilter( graphic );
 
-		fromMain.synchronizeWith( toMain, graphic );
+//		fromMain.synchronizeWith( toMain, graphic );
 		
 		return toMain;
 	}

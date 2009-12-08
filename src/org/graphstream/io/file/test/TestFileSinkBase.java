@@ -67,7 +67,7 @@ import org.junit.Test;
  * method.
  * </p>
  */
-public abstract class TestFileOutputBase
+public abstract class TestFileSinkBase
 {
 // Attribute
 	

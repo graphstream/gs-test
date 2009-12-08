@@ -23,10 +23,13 @@
 package org.graphstream.io.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceGML;
-import org.junit.Before;
+import org.graphstream.io.file.FileSourceDGS;
+import org.junit.*;
 
-public class TestFileInputGML extends TestFileInputBase
+/**
+ * Test the file input in DGS format.
+ */
+public class TestFileSourceDGS extends TestFileSourceBase
 {
 // Before
 	
@@ -34,7 +37,7 @@ public class TestFileInputGML extends TestFileInputBase
 	public void setUp()
 	{
 		graph = new MultiGraph();
-		input = new FileSourceGML();
+		input = new FileSourceDGS();
 	}
 	
 // Test
@@ -43,56 +46,50 @@ public class TestFileInputGML extends TestFileInputBase
 	public String anUndirectedTriangle() { return TEST1_TRIANGLE; }
 	
 	protected static String TEST1_TRIANGLE = 
-		"graph [\n" +
-		"    id \"test1\"\n" +
-		"    node [ id \"A\" ]\n" +
-		"    node [ id \"B\" ]\n" +
-		"    node [ id \"C\" ]\n" +
-		"" +
-		"    edge [ id \"AB\" source \"A\" target \"B\" ]\n" +
-		"    edge [ id \"BC\" source \"B\" target \"C\" ]\n" +
-		"    edge [ id \"CA\" source \"C\" target \"A\" ]\n" +
-		"]\n";
+		"DGS004\n" +
+		"\"test1\" 0 0\n" +
+		"an A\n" +
+		"an B\n" +
+		"an C\n" +
+		"ae AB A B\n" +
+		"ae BC B C\n" +
+		"ae CA C A\n";
 	
 	@Override
 	public String aDirectedTriangle() { return TEST2_DIRECTED_TRIANGLE; }
 	
 	protected static String TEST2_DIRECTED_TRIANGLE =
-		"graph [\n" +
-		"    id \"test1\"\n" +
-		"    node [ id \"A\" ]\n" +
-		"    node [ id \"B\" ]\n" +
-		"    node [ id \"C\" ]\n" +
-		"" +
-		"    edge [ id \"AB\" source \"A\" target \"B\" directed 1 ]\n" +
-		"    edge [ id \"BC\" source \"B\" target \"C\" directed 0 ]\n" +
-		"    edge [ id \"CA\" source \"A\" target \"C\" directed true ]\n" +
-		"]\n";
+		"DGS004\n" +
+		"\"test2\" 0 0\n" +
+		"an A\n" +
+		"an B\n" +
+		"an C\n" +
+		"ae AB A > B\n" +
+		"ae BC B C\n" +
+		"ae CA C < A\n";
 	
 	@Override
 	public String basicAttributes() { return TEST3_ATTRIBUTES; }
 	
 	protected static String TEST3_ATTRIBUTES =
-		"graph [\n" +
-		"    id \"test1\"\n" +
-		"    node [ id \"A\" a 1 b truc c true ]\n" +
-		"    node [ id \"B\" aa \"1,2,3,4\" bb \"foo\" cc bar ]\n" +
-		"    node [ id \"C\" aaa 1.234 ]\n" +
-		"" +
-		"    edge [ id \"AB\" source \"A\" target \"B\" ]\n" +
-		"    edge [ id \"BC\" source \"B\" target \"C\" ]\n" +
-		"    edge [ id \"CA\" source \"C\" target \"A\" ]\n" +
-		"]\n";
+		"DGS004\n" +
+		"\"test3\" 0 0\n" +
+		"an A a:1 b:\"truc\" c:true\n" +
+		"an B aa:1,2,3,4 bb:foo cc:bar\n" +
+		"an C aaa=1.234\n" +
+		"ae AB A B\n" +
+		"ae BC B C\n" +
+		"ae CA C A\n";
 	
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.gml";		
+		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dgs";		
 	}
 	
 	@Override
 	public String anUndirectedTriangleHttpURL()
 	{
-		return "http://graphstream.sourceforge.net/data/undirectedTriangle.gml";
+		return "http://graphstream.sourceforge.net/data/undirectedTriangle.dgs";
 	}
 }

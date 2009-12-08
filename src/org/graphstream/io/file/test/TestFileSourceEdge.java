@@ -22,11 +22,17 @@
 
 package org.graphstream.io.file.test;
 
-import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceDOT;
-import org.junit.Before;
+import static org.junit.Assert.assertTrue;
 
-public class TestFileInputDOT extends TestFileInputBase
+import java.io.IOException;
+import java.io.StringReader;
+
+import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.io.file.FileSourceEdge;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestFileSourceEdge extends TestFileSourceBase
 {
 // Before
 	
@@ -34,15 +40,16 @@ public class TestFileInputDOT extends TestFileInputBase
 	public void setUp()
 	{
 		graph = new MultiGraph();
-		input = new FileSourceDOT();
+		input = new FileSourceEdge();
+		testEdgeIds = false;
 	}
 	
 	public static void main( String args[] )
 	{
-		TestFileInputDOT fid = new TestFileInputDOT();
+		TestFileSourceEdge fid = new TestFileSourceEdge();
 		
 		fid.setUp();
-		fid.test_Access_ReadAll_URL();
+		fid.test_Access_ReadAll_Stream();
 	}
 	
 // Test
@@ -50,49 +57,58 @@ public class TestFileInputDOT extends TestFileInputBase
 	@Override
 	public String anUndirectedTriangle() { return TEST1_TRIANGLE; }
 	
-	protected static String TEST1_TRIANGLE = 
-		"graph test1 {\n" +
-		"    graph [ id=\"test1\" ];\n" +
-		"    A -- B [ id=AB ];\n" +
-		"    B -- C [ id=BC ];\n" +
-		"    C -- A [ id=CA ];\n" +
-		"}\n";
+	protected static String TEST1_TRIANGLE =
+		"A B\n" +
+		"B C\n" +
+		"C A\n";
 	
 	@Override
 	public String aDirectedTriangle() { return TEST2_DIRECTED_TRIANGLE; }
 	
 	protected static String TEST2_DIRECTED_TRIANGLE =
-		"graph test2 {\n" +
-		"    graph [ id=\"test2\" ];\n" +
-		"    A -> B [ id=AB ];\n" +
-		"    B -- C [ id=BC ];\n" +
-		"    A -> C [ id=CA ];\n" +
-		"}\n";
+		"A B\n" +
+		"B C\n" +
+		"A C\n";
 	
 	@Override
-	public String basicAttributes() { return TEST3_ATTRIBUTES; }
+	public String basicAttributes() { return ""; }
+
+	@Test
+	@Override
+	public void test_DirectedTriangle()
+	{
+		input = new FileSourceEdge( true );
+		
+		try
+		{
+			input.addGraphListener( graph );
+			input.readAll( new StringReader( aDirectedTriangle() ) );
+			graph.getNode("B").getEdgeToward("C").setDirected( false );
+			directedTriangleTests();
+		}
+		catch( IOException e )
+		{
+			e.printStackTrace();
+			assertTrue( "IOException, should not happen" + e.getMessage(), false );
+		}
+	}
 	
-	protected static String TEST3_ATTRIBUTES =
-		"graph test3 {\n" +
-		"    graph [ id=\"test3\" ];\n" +
-		"    A [ a=1, b=truc, c=true ];\n" +
-		"    B [ aa=\"1,2,3,4\", bb=\"foo\", cc=bar ];\n" +
-		"    C [ aaa=1.234 ];\n" +
-		"" +
-		"    A -- B [ id=AB ];\n" +
-		"    B -- C [ id=BC ];\n" +
-		"    C -- A [ id=CA ];\n" +
-		"}\n";
+	@Test
+	@Override
+	public void test_Attributes()
+	{
+		// NOP, edge format does not allow attributes.
+	}
 	
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dot";		
+		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.edge";		
 	}
 	
 	@Override
 	public String anUndirectedTriangleHttpURL()
 	{
-		return "http://graphstream.sourceforge.net/data/undirectedTriangle.dot";
+		return "http://graphstream.sourceforge.net/data/undirectedTriangle.edge";
 	}
 }

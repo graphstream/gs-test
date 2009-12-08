@@ -12,14 +12,14 @@ import org.junit.Test;
  * Sadly it is quite difficult to test thread things using junit.
  * </p>
  */
-public class TestThreadProxyFilter
+public class TestThreadProxyPipe
 {
 	public static void main( String args[] )
 	{
-		new TestThreadProxyFilter();
+		new TestThreadProxyPipe();
 	}
 	
-	public TestThreadProxyFilter()
+	public TestThreadProxyPipe()
 	{
 		
 	}

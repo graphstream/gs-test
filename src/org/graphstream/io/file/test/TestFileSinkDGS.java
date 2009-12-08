@@ -26,7 +26,7 @@ import org.graphstream.io.file.FileSinkDGS;
 import org.graphstream.io.file.FileSourceDGS;
 import org.junit.Before;
 
-public class TestFileOutputDGS extends TestFileOutputBase
+public class TestFileSinkDGS extends TestFileSinkBase
 {
 	@Override
     protected String aTemporaryGraphFileName()

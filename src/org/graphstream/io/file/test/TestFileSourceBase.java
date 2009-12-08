@@ -46,7 +46,7 @@ import org.junit.Test;
  * This test class propose a set of JUnit standard tests that can apply to any file format. 
  * </p>
  */
-public abstract class TestFileInputBase
+public abstract class TestFileSourceBase
 {
 // Attribute
 	

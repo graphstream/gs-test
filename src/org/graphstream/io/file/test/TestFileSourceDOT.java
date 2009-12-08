@@ -23,13 +23,10 @@
 package org.graphstream.io.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceDGS;
-import org.junit.*;
+import org.graphstream.io.file.FileSourceDOT;
+import org.junit.Before;
 
-/**
- * Test the file input in DGS format.
- */
-public class TestFileInputDGS extends TestFileInputBase
+public class TestFileSourceDOT extends TestFileSourceBase
 {
 // Before
 	
@@ -37,7 +34,15 @@ public class TestFileInputDGS extends TestFileInputBase
 	public void setUp()
 	{
 		graph = new MultiGraph();
-		input = new FileSourceDGS();
+		input = new FileSourceDOT();
+	}
+	
+	public static void main( String args[] )
+	{
+		TestFileSourceDOT fid = new TestFileSourceDOT();
+		
+		fid.setUp();
+		fid.test_Access_ReadAll_URL();
 	}
 	
 // Test
@@ -46,50 +51,48 @@ public class TestFileInputDGS extends TestFileInputBase
 	public String anUndirectedTriangle() { return TEST1_TRIANGLE; }
 	
 	protected static String TEST1_TRIANGLE = 
-		"DGS004\n" +
-		"\"test1\" 0 0\n" +
-		"an A\n" +
-		"an B\n" +
-		"an C\n" +
-		"ae AB A B\n" +
-		"ae BC B C\n" +
-		"ae CA C A\n";
+		"graph test1 {\n" +
+		"    graph [ id=\"test1\" ];\n" +
+		"    A -- B [ id=AB ];\n" +
+		"    B -- C [ id=BC ];\n" +
+		"    C -- A [ id=CA ];\n" +
+		"}\n";
 	
 	@Override
 	public String aDirectedTriangle() { return TEST2_DIRECTED_TRIANGLE; }
 	
 	protected static String TEST2_DIRECTED_TRIANGLE =
-		"DGS004\n" +
-		"\"test2\" 0 0\n" +
-		"an A\n" +
-		"an B\n" +
-		"an C\n" +
-		"ae AB A > B\n" +
-		"ae BC B C\n" +
-		"ae CA C < A\n";
+		"graph test2 {\n" +
+		"    graph [ id=\"test2\" ];\n" +
+		"    A -> B [ id=AB ];\n" +
+		"    B -- C [ id=BC ];\n" +
+		"    A -> C [ id=CA ];\n" +
+		"}\n";
 	
 	@Override
 	public String basicAttributes() { return TEST3_ATTRIBUTES; }
 	
 	protected static String TEST3_ATTRIBUTES =
-		"DGS004\n" +
-		"\"test3\" 0 0\n" +
-		"an A a:1 b:\"truc\" c:true\n" +
-		"an B aa:1,2,3,4 bb:foo cc:bar\n" +
-		"an C aaa=1.234\n" +
-		"ae AB A B\n" +
-		"ae BC B C\n" +
-		"ae CA C A\n";
+		"graph test3 {\n" +
+		"    graph [ id=\"test3\" ];\n" +
+		"    A [ a=1, b=truc, c=true ];\n" +
+		"    B [ aa=\"1,2,3,4\", bb=\"foo\", cc=bar ];\n" +
+		"    C [ aaa=1.234 ];\n" +
+		"" +
+		"    A -- B [ id=AB ];\n" +
+		"    B -- C [ id=BC ];\n" +
+		"    C -- A [ id=CA ];\n" +
+		"}\n";
 	
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dgs";		
+		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dot";		
 	}
 	
 	@Override
 	public String anUndirectedTriangleHttpURL()
 	{
-		return "http://graphstream.sourceforge.net/data/undirectedTriangle.dgs";
+		return "http://graphstream.sourceforge.net/data/undirectedTriangle.dot";
 	}
 }

@@ -33,7 +33,7 @@ public class TestFileSourceGML extends TestFileSourceBase
 	@Before
 	public void setUp()
 	{
-		graph = new MultiGraph();
+		graph = new MultiGraph( "g1" );
 		input = new FileSourceGML();
 	}
 	
@@ -87,7 +87,7 @@ public class TestFileSourceGML extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.gml";		
+		return "src/org/graphstream/io/file/test/data/undirectedTriangle.gml";		
 	}
 	
 	@Override

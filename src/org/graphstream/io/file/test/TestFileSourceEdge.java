@@ -39,7 +39,7 @@ public class TestFileSourceEdge extends TestFileSourceBase
 	@Before
 	public void setUp()
 	{
-		graph = new MultiGraph();
+		graph = new MultiGraph( "g1" );
 		input = new FileSourceEdge();
 		testEdgeIds = false;
 	}
@@ -103,7 +103,7 @@ public class TestFileSourceEdge extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.edge";		
+		return "src/org/graphstream/io/file/test/data/undirectedTriangle.edge";		
 	}
 	
 	@Override

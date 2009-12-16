@@ -33,7 +33,7 @@ public class TestFileSourceDOT extends TestFileSourceBase
 	@Before
 	public void setUp()
 	{
-		graph = new MultiGraph();
+		graph = new MultiGraph( "g1" );
 		input = new FileSourceDOT();
 	}
 	
@@ -87,7 +87,7 @@ public class TestFileSourceDOT extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dot";		
+		return "src/org/graphstream/io/file/test/data/undirectedTriangle.dot";		
 	}
 	
 	@Override

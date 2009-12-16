@@ -101,8 +101,8 @@ public abstract class TestFileSinkBase
 	@Before
 	public void setup2()
 	{
-		outGraph = new MultiGraph();
-		inGraph  = new MultiGraph();
+		outGraph = new MultiGraph( "out" );
+		inGraph  = new MultiGraph( "in" );
 	}
 	
 	@Test
@@ -151,12 +151,12 @@ public abstract class TestFileSinkBase
 		try
 		{
 			output.begin( aTemporaryGraphFileName() );
-			output.nodeAdded( "", "A" );
-			output.nodeAdded( "", "B" );
-			output.nodeAdded( "", "C" );
-			output.edgeAdded( "", "AB", "A", "B", false );
-			output.edgeAdded( "", "BC", "B", "C", false );
-			output.edgeAdded( "", "CA", "C", "A", false );
+			output.nodeAdded( "?", 1, "A" );
+			output.nodeAdded( "?", 2, "B" );
+			output.nodeAdded( "?", 3, "C" );
+			output.edgeAdded( "?", 4, "AB", "A", "B", false );
+			output.edgeAdded( "?", 5, "BC", "B", "C", false );
+			output.edgeAdded( "?", 6, "CA", "C", "A", false );
 			output.end();
 
 			input.addGraphListener( inGraph );

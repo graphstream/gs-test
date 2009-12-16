@@ -27,8 +27,8 @@ public class TestThreadProxyPipe
 	@Test
 	public void Test1_GraphToWardGraph()
 	{
-		Graph source = new MultiGraph();
-		Graph target = new MultiGraph();
+		Graph source = new MultiGraph( "g1" );
+		Graph target = new MultiGraph( "g2" );
 		
 		// Start to populate the graph to test the "replay" feature of the proxy.
 		
@@ -37,15 +37,13 @@ public class TestThreadProxyPipe
 		source.addNode( "C" );
 		source.addEdge( "AB", "A", "B" );
 		source.addEdge( "BC", "B", "C" );
-		source.addEdge( "CA", "C", "A " );
+		source.addEdge( "CA", "C", "A" );
 		
 		source.getNode( "A" ).addAttribute( "A1", "foo" );
 		source.getNode( "A" ).addAttribute( "A2", "foo" );
 		
-		ThreadProxyPipe proxy = new ThreadProxyPipe( source );
+		ThreadProxyPipe proxy = new ThreadProxyPipe( source, target, true );
 		
-		proxy.addGraphListener( target );
-
 		Thread other = new Thread( new AnotherThread( proxy, target ) {
 			public void run() {
 				// The second part of the test starts

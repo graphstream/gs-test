@@ -36,7 +36,7 @@ public class TestFileSourceDGS extends TestFileSourceBase
 	@Before
 	public void setUp()
 	{
-		graph = new MultiGraph();
+		graph = new MultiGraph( "g1" );
 		input = new FileSourceDGS();
 	}
 	
@@ -84,7 +84,7 @@ public class TestFileSourceDGS extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/miv/graphstream/io/file/test/data/undirectedTriangle.dgs";		
+		return "src/org/graphstream/io/file/test/data/undirectedTriangle.dgs";		
 	}
 	
 	@Override

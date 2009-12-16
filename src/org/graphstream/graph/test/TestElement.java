@@ -39,7 +39,7 @@ public class TestElement
 	@Test
 	public void testElementSimpleAttributes()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		Node A = graph.addNode( "A" );
 		
@@ -89,7 +89,7 @@ public class TestElement
 	@Test
 	public void testElementValueAttributes()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		Node A = graph.addNode( "A" );
 		
@@ -203,7 +203,7 @@ public class TestElement
 	@Test
 	public void testElementMultiAttributes()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		Node A = graph.addNode( "A" );
 		
@@ -232,7 +232,7 @@ public class TestElement
 	@Test
 	public void testElementUtilityMethods()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		Node A = graph.addNode( "A" );
 		
@@ -264,7 +264,7 @@ public class TestElement
 	@Test
 	public void testElementIterables()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		Node A = graph.addNode( "A" );
 		
@@ -293,7 +293,7 @@ public class TestElement
 	@Test
 	public void testNullAttributes()
 	{
-		Graph graph = new MultiGraph();
+		Graph graph = new MultiGraph( "g1" );
 		
 		graph.addAttribute( "foo" );
 		graph.addAttribute( "bar", (Object)null );	// Yes an attribute with a null value, You can !

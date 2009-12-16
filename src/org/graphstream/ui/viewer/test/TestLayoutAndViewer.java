@@ -55,7 +55,8 @@ public class TestLayoutAndViewer
 
 		Generator gen = new DorogovtsevMendesGenerator();
 		
-		gen.begin( graph );
+		gen.addGraphListener( graph );
+		gen.begin();
 		for( int i=0; i<1000; i++ )
 			gen.nextElement();
 		gen.end();

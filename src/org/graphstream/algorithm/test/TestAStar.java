@@ -66,7 +66,7 @@ public class TestAStar
 	{
 		// Do not forget : called for each test !
 		
-		graph = new MultiGraph( false, true );
+		graph = new MultiGraph( "g1", false, true );
 		
 		AB = graph.addEdge( "AB", "A", "B" );
 		BC = graph.addEdge( "BC", "B", "C" );

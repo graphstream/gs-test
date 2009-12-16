@@ -41,7 +41,7 @@ public class TestGraph
 	{
 		testBasic( new SingleGraph( "sg" ) );
 		testBasic( new MultiGraph( "mg" ) );
-//		testBasic( new AdjacencyListGraph( "alg" ) );
+		testBasic( new AdjacencyListGraph( "alg" ) );
 	}
 	
 	protected void testBasic( Graph graph )

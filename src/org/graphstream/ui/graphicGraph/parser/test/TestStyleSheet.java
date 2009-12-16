@@ -63,7 +63,7 @@ public class TestStyleSheet
 	@Before
 	public void setUp()
 	{
-		graph = new DefaultGraph();
+		graph = new DefaultGraph( "g1" );
 		
 		A  = graph.addNode( "A" );
 		B  = graph.addNode( "B" );

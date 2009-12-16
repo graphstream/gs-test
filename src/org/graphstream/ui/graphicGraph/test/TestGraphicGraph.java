@@ -63,7 +63,7 @@ public class TestGraphicGraph
 	{
 		// Test the class alone.
 		
-		outGraph = new GraphicGraph();
+		outGraph = new GraphicGraph( "GraphicGraph" );
 		
 		// The usual triangle test.
 		
@@ -134,7 +134,7 @@ public class TestGraphicGraph
 	{
 		// Test the style sheet loading capabilities of the graphic graph.
 		
-		outGraph = new GraphicGraph();
+		outGraph = new GraphicGraph( "GraphicGraph" );
 
 		outGraph.addNode( "A" );
 		outGraph.addNode( "B" );
@@ -220,7 +220,7 @@ public class TestGraphicGraph
 		// Test the GraphicGraph as an output for another graph.
 		
 		inGraph  = new MultiGraph( "inputGraph" );
-		outGraph = new GraphicGraph();
+		outGraph = new GraphicGraph( "GraphicGraph" );
 		
 		// Simply put the graphic graph as listener of the input graph.
 		
@@ -266,7 +266,7 @@ public class TestGraphicGraph
 	public void testAsOutputSprites()
 	{
 		inGraph  = new MultiGraph( "inputGraph" );
-		outGraph = new GraphicGraph();
+		outGraph = new GraphicGraph( "GraphicGraph" );
 		
 		inGraph.addGraphListener( outGraph );
 
@@ -453,13 +453,13 @@ public class TestGraphicGraph
 	}
 	
 	@Test
-	public void testAsFilter()
+	public void testAsPipe()
 	{
-		// Now test the graphic graph as a filter loop.
+		// Now test the graphic graph as a pipe loop.
 		// This allows to synchronise two graphs.
 		
 		inGraph  = new MultiGraph( "input graph" );
-		outGraph = new GraphicGraph();
+		outGraph = new GraphicGraph( "GraphicGraph" );
 		
 		inGraph.addGraphListener( outGraph );
 		outGraph.addGraphListener( inGraph );	// You can do this !! We are careful to recursive calls !!!

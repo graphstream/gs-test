@@ -25,8 +25,8 @@ package org.graphstream.ui.viewer.test;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.ProxyPipe;
-import org.graphstream.io.thread.ThreadProxyPipe;
+import org.graphstream.stream.ProxyPipe;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.graphstream.ui2.swingViewer.Viewer;
 
 /**
@@ -46,7 +46,7 @@ public class TestViewerColorInterpolation
 		Viewer          viewer    = new Viewer( toSwing );
 		ProxyPipe       fromSwing = viewer.newThreadProxyOnGraphicGraph();
 		
-		fromSwing.addGraphAttributesListener( graph );
+		fromSwing.addAttributeSink( graph );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );

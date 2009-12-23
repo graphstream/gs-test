@@ -485,7 +485,7 @@ public class TestGraph
 		
 		Graph output = new MultiGraph( "outout" );
 		
-		input.addGraphListener( output );
+		input.addSink( output );
 		
 		Node A = input.addNode( "A" );
 		input.addNode( "B" );

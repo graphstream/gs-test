@@ -26,8 +26,8 @@ import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
 import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.ProxyPipe;
-import org.graphstream.io.thread.ThreadProxyPipe;
+import org.graphstream.stream.ProxyPipe;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.graphstream.ui2.layout.Layout;
 import org.graphstream.ui2.layout.springbox.SpringBox;
 import org.graphstream.ui2.swingViewer.Viewer;
@@ -48,14 +48,14 @@ public class TestLayoutAndViewer
 		Layout    layout     = new SpringBox( false );
 		
 		graph.addAttribute( "ui.stylesheet", styleSheet );
-		fromViewer.addGraphListener( graph );
+		fromViewer.addSink( graph );
 		viewer.addDefaultView( true );
-		graph.addGraphListener( layout );
-		layout.addGraphAttributesListener( graph );
+		graph.addSink( layout );
+		layout.addAttributeSink( graph );
 
 		Generator gen = new DorogovtsevMendesGenerator();
 		
-		gen.addGraphListener( graph );
+		gen.addSink( graph );
 		gen.begin();
 		for( int i=0; i<5000; i++ )
 			gen.nextElement();

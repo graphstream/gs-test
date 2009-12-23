@@ -32,13 +32,13 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSink;
-import org.graphstream.io.file.FileSource;
+import org.graphstream.stream.file.FileSink;
+import org.graphstream.stream.file.FileSource;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Base for tests on descendants of {@link org.graphstream.io.file.FileSink}.
+ * Base for tests on descendants of {@link org.graphstream.stream.file.FileSink}.
  * 
  * <p>This files does all the tests. To implement a test for a specific file
  * format, you have only to implement/override two methods :
@@ -47,8 +47,8 @@ import org.junit.Test;
  * 			name of a file with the correct extension for the file format.</li>
  * 		<li>Implement the {@link #setup()} method that
  * 			initialise the {@link #input} and {@link #output} fields. These
- * 			fields contain an instance of the {@link org.graphstream.io.file.FileSink}
- * 			you want to test and the corresponding {@link org.graphstream.io.file.FileSource}
+ * 			fields contain an instance of the {@link org.graphstream.stream.file.FileSink}
+ * 			you want to test and the corresponding {@link org.graphstream.stream.file.FileSource}
  * 			for reading back the results of an output and test it.</li>
  * </ul>
  * </p>
@@ -84,8 +84,8 @@ public abstract class TestFileSinkBase
 	
 	/**
 	 * Method to implement to create the {@link #input} and {@link #output} fields. These fields
-	 * contain the instance of the {@link org.graphstream.io.file.FileSource} and
-	 * {@link org.graphstream.io.file.FileSink} to test.
+	 * contain the instance of the {@link org.graphstream.stream.file.FileSource} and
+	 * {@link org.graphstream.stream.file.FileSink} to test.
 	 */
 	@Before
 	public abstract void setup();
@@ -113,7 +113,7 @@ public abstract class TestFileSinkBase
 		try
 		{
 			output.writeAll( outGraph, aTemporaryGraphFileName() );
-			input.addGraphListener( inGraph );
+			input.addSink( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -133,7 +133,7 @@ public abstract class TestFileSinkBase
 		try
 		{
 			output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-			input.addGraphListener( inGraph );
+			input.addSink( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -159,7 +159,7 @@ public abstract class TestFileSinkBase
 			output.edgeAdded( "?", 6, "CA", "C", "A", false );
 			output.end();
 
-			input.addGraphListener( inGraph );
+			input.addSink( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testUndirectedTriangle();
@@ -179,7 +179,7 @@ public abstract class TestFileSinkBase
 		try
 		{
 			output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-			input.addGraphListener( inGraph );
+			input.addSink( inGraph );
 			input.readAll( aTemporaryGraphFileName() );
 			removeFile( aTemporaryGraphFileName() );
 			testDirectedTriangle();
@@ -201,7 +201,7 @@ public abstract class TestFileSinkBase
 			try
 			{
 				output.writeAll( outGraph, new FileOutputStream( aTemporaryGraphFileName() ) );
-				input.addGraphListener( inGraph );
+				input.addSink( inGraph );
 				input.readAll( aTemporaryGraphFileName() );
 				removeFile( aTemporaryGraphFileName() );
 				testAttributedTriangle();
@@ -222,7 +222,7 @@ public abstract class TestFileSinkBase
 			try
 			{
 				output.begin( new FileOutputStream( aTemporaryGraphFileName() ) );
-				outGraph.addGraphListener( output );
+				outGraph.addSink( output );
 				outGraph.stepBegins( 0 );
 				outGraph.addNode( "A" );
 				outGraph.addNode( "B" );
@@ -243,7 +243,7 @@ public abstract class TestFileSinkBase
 				outGraph.removeEdge( "BC" );
 				output.end();
 				
-				input.addGraphListener( inGraph );
+				input.addSink( inGraph );
 				input.begin( aTemporaryGraphFileName() );
 				testDynamicTriangleStep0();
 				input.nextStep();

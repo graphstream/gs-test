@@ -36,7 +36,7 @@ import java.net.URLConnection;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.io.file.FileSource;
+import org.graphstream.stream.file.FileSource;
 import org.junit.Test;
 
 /**
@@ -108,7 +108,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( new StringReader( anUndirectedTriangle() ) );
 			undirectedTriangleTests();
 		}
@@ -124,7 +124,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.begin( new StringReader( anUndirectedTriangle() ) );
 			while( input.nextEvents() );
 			input.end();
@@ -143,7 +143,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( new FileInputStream( anUndirectedTriangleFileName() ) );
 			undirectedTriangleTests();
 		}
@@ -164,7 +164,7 @@ public abstract class TestFileSourceBase
 			URLConnection c = url.openConnection();
 			c.setDefaultUseCaches( false );
 			
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( url );
 			undirectedTriangleTests();
 		}
@@ -180,7 +180,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( anUndirectedTriangleFileName() );
 			undirectedTriangleTests();
 		}
@@ -196,7 +196,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( new StringReader( aDirectedTriangle() ) );
 			directedTriangleTests();
 		}
@@ -212,7 +212,7 @@ public abstract class TestFileSourceBase
 	{
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( new StringReader( basicAttributes() ) );
 			basicAttributesTests();
 		}

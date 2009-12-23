@@ -23,7 +23,7 @@
 package org.graphstream.io.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceDGS;
+import org.graphstream.stream.file.FileSourceDGS;
 import org.junit.*;
 
 /**

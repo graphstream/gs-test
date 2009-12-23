@@ -23,7 +23,7 @@
 package org.graphstream.io.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceDOT;
+import org.graphstream.stream.file.FileSourceDOT;
 import org.junit.Before;
 
 public class TestFileSourceDOT extends TestFileSourceBase

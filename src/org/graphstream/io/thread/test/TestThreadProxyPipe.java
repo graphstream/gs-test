@@ -2,7 +2,7 @@ package org.graphstream.io.thread.test;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.thread.ThreadProxyPipe;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.junit.Test;
 
 /**

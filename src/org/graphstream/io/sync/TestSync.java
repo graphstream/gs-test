@@ -22,6 +22,8 @@
  */
 package org.graphstream.io.sync;
 
+import org.graphstream.stream.sync.SinkTime;
+import org.graphstream.stream.sync.SourceTime;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;

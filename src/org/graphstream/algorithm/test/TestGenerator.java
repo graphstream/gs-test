@@ -11,7 +11,7 @@ import org.graphstream.algorithm.generator.PreferentialAttachmentGenerator;
 import org.graphstream.algorithm.generator.RandomEuclideanGenerator;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.graphstream.io.Pipe;
+import org.graphstream.stream.Pipe;
 import org.graphstream.ui.GraphViewerRemote;
 
 import org.junit.Test;
@@ -67,10 +67,10 @@ public class TestGenerator
 
 		int i = size;
 		
-		gen.addGraphListener(g);
+		gen.addSink(g);
 		
 		if( gen instanceof Pipe )
-			g.addGraphAttributesListener( (Pipe) gen );
+			g.addAttributeSink( (Pipe) gen );
 		
 		GraphViewerRemote gvr = g.display();
 		

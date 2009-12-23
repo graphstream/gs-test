@@ -32,7 +32,7 @@ import javax.swing.Timer;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.thread.ThreadProxyPipe;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.graphstream.ui2.graphicGraph.GraphicGraph;
 import org.graphstream.ui2.graphicGraph.GraphicSprite;
 import org.graphstream.ui2.graphicGraph.stylesheet.Style;
@@ -61,7 +61,7 @@ public class TestGraphSynchronisationProxyThread
 		InTheSwingThread viewerThread = new InTheSwingThread( toGraphic );
 		ThreadProxyPipe  toMain       = viewerThread.getProxy();
 		
-		toMain.addGraphAttributesListener( main );	// Get the graphic graph proxy.
+		toMain.addAttributeSink( main );	// Get the graphic graph proxy.
 		
 		// Now launch the graphic graph in the Swing thread using a Swing Timer.
 
@@ -194,7 +194,7 @@ public static class InTheSwingThread implements ActionListener
 		
 		timer.setRepeats( true );
 		timer.setCoalesce( true );
-		input.addGraphListener( graphic );
+		input.addSink( graphic );
 	}
 
 	public void start()

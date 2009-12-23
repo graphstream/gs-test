@@ -56,8 +56,8 @@ public class TestGraphSynchronisation
 		g2.addNode( "Z" );			// Allows to offset the internal "time" of source g2
 		g2.removeNode( "Z" );		// (see implementation of synchronisation).
 		
-		g1.addGraphListener( g2 );	// These two lines seem simple but introduce an eventual
-		g2.addGraphListener( g1 );	// recursive loop between the two graphs. Graph synchronisation
+		g1.addSink( g2 );	// These two lines seem simple but introduce an eventual
+		g2.addSink( g1 );	// recursive loop between the two graphs. Graph synchronisation
 									// is all about avoiding this loop.
 		
 		// Test with element addition.
@@ -170,9 +170,9 @@ public class TestGraphSynchronisation
 	
 	protected void testGraphSyncCycleSimple( Graph g1, Graph g2, Graph g3 )
 	{
-		g1.addGraphListener( g2 );
-		g2.addGraphListener( g3 );
-		g3.addGraphListener( g1 );
+		g1.addSink( g2 );
+		g2.addSink( g3 );
+		g3.addSink( g1 );
 		testGraphSyncCycle( g1, g2, g3 );
 	}
 	
@@ -195,10 +195,10 @@ public class TestGraphSynchronisation
 	
 	protected void testGraphSyncCycleProblem( Graph g1, Graph g2, Graph g3 )
 	{
-		g1.addGraphListener( g2 );
-		g2.addGraphListener( g3 );
-		g3.addGraphListener( g1 );
-		g3.addGraphListener( g2 );	// Exactly the same test as above with this line added... :-)
+		g1.addSink( g2 );
+		g2.addSink( g3 );
+		g3.addSink( g1 );
+		g3.addSink( g2 );	// Exactly the same test as above with this line added... :-)
 		testGraphSyncCycle( g1, g2, g3 );
 	}
 	

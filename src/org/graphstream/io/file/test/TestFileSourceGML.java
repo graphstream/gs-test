@@ -23,7 +23,7 @@
 package org.graphstream.io.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceGML;
+import org.graphstream.stream.file.FileSourceGML;
 import org.junit.Before;
 
 public class TestFileSourceGML extends TestFileSourceBase

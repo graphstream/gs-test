@@ -22,8 +22,8 @@
 
 package org.graphstream.io.file.test;
 
-import org.graphstream.io.file.FileSinkDGS;
-import org.graphstream.io.file.FileSourceDGS;
+import org.graphstream.stream.file.FileSinkDGS;
+import org.graphstream.stream.file.FileSourceDGS;
 import org.junit.Before;
 
 public class TestFileSinkDGS extends TestFileSinkBase

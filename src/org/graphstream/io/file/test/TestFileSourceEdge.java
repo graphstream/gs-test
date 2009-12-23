@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.file.FileSourceEdge;
+import org.graphstream.stream.file.FileSourceEdge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,7 +81,7 @@ public class TestFileSourceEdge extends TestFileSourceBase
 		
 		try
 		{
-			input.addGraphListener( graph );
+			input.addSink( graph );
 			input.readAll( new StringReader( aDirectedTriangle() ) );
 			graph.getNode("B").getEdgeToward("C").setDirected( false );
 			directedTriangleTests();

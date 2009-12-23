@@ -224,7 +224,7 @@ public class TestGraphicGraph
 		
 		// Simply put the graphic graph as listener of the input graph.
 		
-		inGraph.addGraphListener( outGraph );
+		inGraph.addSink( outGraph );
 		
 		// The usual triangle test : add some nodes and edges.
 		
@@ -268,7 +268,7 @@ public class TestGraphicGraph
 		inGraph  = new MultiGraph( "inputGraph" );
 		outGraph = new GraphicGraph( "GraphicGraph" );
 		
-		inGraph.addGraphListener( outGraph );
+		inGraph.addSink( outGraph );
 
 		SpriteManager sman = new SpriteManager( inGraph );
 		
@@ -423,7 +423,7 @@ public class TestGraphicGraph
 		// synchronised at the same time. We also check the old sprite manager 1 we
 		// detached is not touched.
 		
-		outGraph.addGraphAttributesListener( inGraph );
+		outGraph.addAttributeSink( inGraph );
 		outGraph.addSprite( "S4" );
 		
 		assertNotNull( sman2.getSprite("S4") );
@@ -432,7 +432,7 @@ public class TestGraphicGraph
 		
 		// Now test the removal synchronisation.
 		
-		outGraph.removeGraphAttributesListener( inGraph );	// This is tested in another test.
+		outGraph.removeAttributeSink( inGraph );	// This is tested in another test.
 		
 		sman2.removeSprite( "S4" );
 		
@@ -461,8 +461,8 @@ public class TestGraphicGraph
 		inGraph  = new MultiGraph( "input graph" );
 		outGraph = new GraphicGraph( "GraphicGraph" );
 		
-		inGraph.addGraphListener( outGraph );
-		outGraph.addGraphListener( inGraph );	// You can do this !! We are careful to recursive calls !!!
+		inGraph.addSink( outGraph );
+		outGraph.addSink( inGraph );	// You can do this !! We are careful to recursive calls !!!
 		
 		// Add a nodes in one graph and check they are in the other.
 		

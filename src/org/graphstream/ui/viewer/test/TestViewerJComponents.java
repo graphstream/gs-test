@@ -27,8 +27,8 @@ import javax.swing.UIManager;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.io.ProxyPipe;
-import org.graphstream.io.thread.ThreadProxyPipe;
+import org.graphstream.stream.ProxyPipe;
+import org.graphstream.stream.thread.ThreadProxyPipe;
 import org.graphstream.ui2.graphicGraph.stylesheet.StyleConstants;
 import org.graphstream.ui2.spriteManager.Sprite;
 import org.graphstream.ui2.spriteManager.SpriteManager;
@@ -48,7 +48,7 @@ public class TestViewerJComponents
 		ProxyPipe       fromSwing = viewer.newThreadProxyOnGraphicGraph();
 		SpriteManager   sman      = new SpriteManager( graph );
 		
-		fromSwing.addGraphAttributesListener( graph );
+		fromSwing.addAttributeSink( graph );
 		viewer.addDefaultView( true );
 
 		Node A = graph.addNode( "A" );

@@ -22,7 +22,7 @@ import java.util.Iterator;
 import org.graphstream.algorithm.*;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.graphstream.io.*;
+import org.graphstream.stream.*;
 
 /**
  * Test the APSP algorithm.

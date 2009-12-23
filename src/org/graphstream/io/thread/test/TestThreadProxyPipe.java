@@ -53,7 +53,7 @@ public class TestThreadProxyPipe
 				
 				do
 				{
-					proxy.checkEvents();
+					proxy.pump();
 					
 					if( target.hasAttribute( "STOP!" ) )
 						loop = false;

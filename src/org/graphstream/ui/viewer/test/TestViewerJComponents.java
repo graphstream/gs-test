@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.io.ProxyPipe;
 import org.graphstream.io.thread.ThreadProxyPipe;
 import org.graphstream.ui2.graphicGraph.stylesheet.StyleConstants;
 import org.graphstream.ui2.spriteManager.Sprite;
@@ -41,11 +42,11 @@ public class TestViewerJComponents
 	}
 	
 	public TestViewerJComponents() {
-		Graph             graph     = new MultiGraph( "main graph" );
+		Graph           graph     = new MultiGraph( "main graph" );
 		ThreadProxyPipe toSwing   = new ThreadProxyPipe( graph );
-		Viewer            viewer    = new Viewer( toSwing );
-		ThreadProxyPipe fromSwing = viewer.getThreadProxyOnGraphicGraph();
-		SpriteManager     sman      = new SpriteManager( graph );
+		Viewer          viewer    = new Viewer( toSwing );
+		ProxyPipe       fromSwing = viewer.newThreadProxyOnGraphicGraph();
+		SpriteManager   sman      = new SpriteManager( graph );
 		
 		fromSwing.addGraphAttributesListener( graph );
 		viewer.addDefaultView( true );
@@ -91,7 +92,7 @@ public class TestViewerJComponents
 		{
 			try { Thread.sleep( 30 ); } catch( InterruptedException e ) { e.printStackTrace(); }
 			
-			fromSwing.checkEvents();
+			fromSwing.pump();
 			
 			if( graph.hasAttribute( "ui.viewClosed" ) ) {
 				loop = false;

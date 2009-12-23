@@ -41,10 +41,10 @@ public class TestViewerColorInterpolation
 	
 	public TestViewerColorInterpolation()
 	{
-		Graph             graph     = new MultiGraph( "main graph" );
+		Graph           graph     = new MultiGraph( "main graph" );
 		ThreadProxyPipe toSwing   = new ThreadProxyPipe( graph );
-		Viewer            viewer    = new Viewer( toSwing );
-		ProxyPipe       fromSwing = viewer.getThreadProxyOnGraphicGraph();
+		Viewer          viewer    = new Viewer( toSwing );
+		ProxyPipe       fromSwing = viewer.newThreadProxyOnGraphicGraph();
 		
 		fromSwing.addGraphAttributesListener( graph );
 		viewer.addDefaultView( true );
@@ -71,7 +71,7 @@ public class TestViewerColorInterpolation
 		{
 			try { Thread.sleep( 100 ); } catch( InterruptedException e ) { e.printStackTrace(); }
 			
-			fromSwing.checkEvents();
+			fromSwing.pump();
 			
 			if( graph.hasAttribute( "ui.viewClosed" ) )
 			{

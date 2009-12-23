@@ -26,6 +26,7 @@ import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
 import org.graphstream.algorithm.generator.Generator;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.io.ProxyPipe;
 import org.graphstream.io.thread.ThreadProxyPipe;
 import org.graphstream.ui2.layout.Layout;
 import org.graphstream.ui2.layout.springbox.SpringBox;
@@ -40,14 +41,13 @@ public class TestLayoutAndViewer
 	
 	public TestLayoutAndViewer()
 	{
-		boolean           loop       = true;
-		Graph             graph      = new MultiGraph( "g1" );
-		Viewer            viewer     = new Viewer( new ThreadProxyPipe( graph ) );
-		ThreadProxyPipe fromViewer = viewer.getThreadProxyOnGraphicGraph();
-		Layout            layout     = new SpringBox( false );
+		boolean   loop       = true;
+		Graph     graph      = new MultiGraph( "g1" );
+		Viewer    viewer     = new Viewer( new ThreadProxyPipe( graph ) );
+		ProxyPipe fromViewer = viewer.newThreadProxyOnGraphicGraph();
+		Layout    layout     = new SpringBox( false );
 		
 		graph.addAttribute( "ui.stylesheet", styleSheet );
-		
 		fromViewer.addGraphListener( graph );
 		viewer.addDefaultView( true );
 		graph.addGraphListener( layout );
@@ -57,13 +57,13 @@ public class TestLayoutAndViewer
 		
 		gen.addGraphListener( graph );
 		gen.begin();
-		for( int i=0; i<1000; i++ )
+		for( int i=0; i<5000; i++ )
 			gen.nextElement();
 		gen.end();
 		
 		while( loop )
 		{
-			fromViewer.checkEvents();
+			fromViewer.pump();
 			
 			if( graph.hasAttribute( "ui.viewClosed" ) )
 			{

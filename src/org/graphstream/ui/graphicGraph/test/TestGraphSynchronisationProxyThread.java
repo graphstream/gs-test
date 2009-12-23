@@ -91,7 +91,7 @@ public class TestGraphSynchronisationProxyThread
 		S1.addAttribute( "ui.foo", "bar" );
 		main.stepBegins( 1 );
 		
-		toMain.checkEvents();
+		toMain.pump();
 		
 		// We ask the Swing thread to modify the graphic graph.
 		
@@ -100,15 +100,15 @@ public class TestGraphSynchronisationProxyThread
 
 		// Wait and stop.
 
-		toMain.checkEvents();
+		toMain.pump();
 		sleep( 1000 );
-		toMain.checkEvents();
+		toMain.pump();
 		
 		main.addAttribute( "ui.STOP" );
 		
-		toMain.checkEvents();
+		toMain.pump();
 		sleep( 1000 );
-		toMain.checkEvents();
+		toMain.pump();
 
 		// ****************************************************************************************
 		// Now we can begin the real test. We ensure the timer in the Swing graph stopped and check
@@ -209,7 +209,7 @@ public static class InTheSwingThread implements ActionListener
 	
 	public void actionPerformed( ActionEvent e )
     {
-		fromMain.checkEvents();
+		fromMain.pump();
 		
 		// We wait for some attributes to be added. Such events trigger actions that modify
 		// the graphic graph and should be propagated (synchronised) to the main graph.

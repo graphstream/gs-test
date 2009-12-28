@@ -83,9 +83,9 @@ public class TestViewerJComponents
 //		s3.addAttribute( "ui.label", "" );
 		
 		boolean loop  = true;
-		float x = 0;
-		float y = 1;
-		float dir = 0.005f;
+//		float x = 0;
+//		float y = 1;
+//		float dir = 0.005f;
 		float angle = 0;
 		
 		while( loop )

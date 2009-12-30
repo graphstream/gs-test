@@ -75,6 +75,7 @@ public class TestFileSourceEdge extends TestFileSourceBase
 
 	@Test
 	@Override
+	@SuppressWarnings("deprecation")
 	public void test_DirectedTriangle()
 	{
 		input = new FileSourceEdge( true );

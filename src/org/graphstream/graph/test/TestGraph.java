@@ -157,6 +157,7 @@ public class TestGraph
 //		testDirected( new AdjacencyListGraph( "alg" ) );
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected void testDirected( Graph graph )
 	{
 		Node A = graph.addNode( "A" );
@@ -255,6 +256,7 @@ public class TestGraph
 //		testIterables( new AdjacencyListGraph( "alg" ) );		
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected void testIterables( Graph graph )
 	{
 		Node A = graph.addNode( "A" );

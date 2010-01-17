@@ -20,7 +20,7 @@
  * 	Guilhelm Savin
  */
 
-package org.graphstream.io.file.test;
+package org.graphstream.stream.file.test;
 
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.stream.file.FileSourceDOT;
@@ -87,7 +87,7 @@ public class TestFileSourceDOT extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/graphstream/io/file/test/data/undirectedTriangle.dot";		
+		return "src/org/graphstream/stream/file/test/data/undirectedTriangle.dot";		
 	}
 	
 	@Override

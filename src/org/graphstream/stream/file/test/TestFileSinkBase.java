@@ -20,7 +20,7 @@
  * 	Guilhelm Savin
  */
 
-package org.graphstream.io.file.test;
+package org.graphstream.stream.file.test;
 
 import static org.junit.Assert.*;
 

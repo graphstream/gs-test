@@ -20,7 +20,7 @@
  * 	Guilhelm Savin
  */
 
-package org.graphstream.io.file.test;
+package org.graphstream.stream.file.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -104,7 +104,7 @@ public class TestFileSourceEdge extends TestFileSourceBase
 	@Override
 	public String anUndirectedTriangleFileName()
 	{
-		return "src/org/graphstream/io/file/test/data/undirectedTriangle.edge";		
+		return "src/org/graphstream/stream/file/test/data/undirectedTriangle.edge";		
 	}
 	
 	@Override

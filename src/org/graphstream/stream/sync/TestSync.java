@@ -20,7 +20,7 @@
  * 	Yoann Pigné
  * 	Guilhelm Savin
  */
-package org.graphstream.io.sync;
+package org.graphstream.stream.sync;
 
 import org.graphstream.stream.sync.SinkTime;
 import org.graphstream.stream.sync.SourceTime;

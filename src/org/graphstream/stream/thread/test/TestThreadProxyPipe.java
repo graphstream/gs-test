@@ -1,4 +1,4 @@
-package org.graphstream.io.thread.test;
+package org.graphstream.stream.thread.test;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;

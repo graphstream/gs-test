@@ -25,30 +25,30 @@ package org.graphstream.ui.viewer.test;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.stream.ProxyPipe;
-import org.graphstream.stream.thread.ThreadProxyPipe;
-import org.graphstream.ui2.swingViewer.Viewer;
+import org.graphstream.ui2.swingViewer.ViewerListener;
+import org.graphstream.ui2.swingViewer.ViewerPipe;
 
 /**
  * Test the viewer.
  */
-public class TestViewerColorInterpolation
+public class TestViewerColorInterpolation implements ViewerListener
 {
 	public static void main( String args[] )
 	{
+		System.setProperty( "gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer" );
+		
 		new TestViewerColorInterpolation();
 	}
 	
+	protected boolean loop = true;
+	
 	public TestViewerColorInterpolation()
 	{
-		Graph           graph     = new MultiGraph( "main graph" );
-		ThreadProxyPipe toSwing   = new ThreadProxyPipe( graph );
-		Viewer          viewer    = new Viewer( toSwing );
-		ProxyPipe       fromSwing = viewer.newThreadProxyOnGraphicGraph();
-		
-		fromSwing.addAttributeSink( graph );
-		viewer.addDefaultView( true );
+		Graph      graph = new MultiGraph( "main graph" );
+		ViewerPipe pipe  = graph.display2( false ).newViewerPipe();
 
+		pipe.addViewerListener( this );
+		
 		Node A = graph.addNode( "A" );
 		Node B = graph.addNode( "B" );
 		Node C = graph.addNode( "C" );
@@ -63,39 +63,30 @@ public class TestViewerColorInterpolation
 		
 		graph.addAttribute( "ui.stylesheet", styleSheet );
 		
-		boolean loop  = true;
-		float   color = 0;
-		float   dir   = 0.01f;
+		float color = 0;
+		float dir   = 0.01f;
 		
 		while( loop )
 		{
 			try { Thread.sleep( 100 ); } catch( InterruptedException e ) { e.printStackTrace(); }
 			
-			fromSwing.pump();
+			pipe.pump();
 			
-			if( graph.hasAttribute( "ui.viewClosed" ) )
+			color += dir;
+			
+			if( color > 1 )
 			{
-				loop = false;
+				color = 1;
+				dir = -dir;
 			}
-			else
+			else if( color < 0 )
 			{
-				color += dir;
-				
-				if( color > 1 )
-				{
-					color = 1;
-					dir = -dir;
-				}
-				else if( color < 0 )
-				{
-					color = 0;
-					dir = -dir;
-				}
-				
-				A.setAttribute( "ui.color", color );
-
-				showSelection( graph );
+				color = 0;
+				dir = -dir;
 			}
+			
+			A.setAttribute( "ui.color", color );
+			showSelection( graph );
 		}
 		
 		System.out.printf( "Bye bye ...%n" );
@@ -133,4 +124,17 @@ public class TestViewerColorInterpolation
 		"node:selected { fill-color: red;  fill-mode: plain; }" +
 		"node:clicked  { fill-color: blue; fill-mode: plain; }" +
 		"node#A        { fill-color: green, yellow, purple; fill-mode: dyn-plain; }";
+
+	public void buttonPushed( String id )
+    {
+    }
+
+	public void buttonReleased( String id )
+    {
+    }
+
+	public void viewClosed( String viewName )
+    {
+		loop = false;
+    }
 }

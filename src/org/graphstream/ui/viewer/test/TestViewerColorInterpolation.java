@@ -45,7 +45,7 @@ public class TestViewerColorInterpolation implements ViewerListener
 	public TestViewerColorInterpolation()
 	{
 		Graph      graph = new MultiGraph( "main graph" );
-		ViewerPipe pipe  = graph.display2( false ).newViewerPipe();
+		ViewerPipe pipe  = graph.display( false ).newViewerPipe();
 
 		pipe.addViewerListener( this );
 		

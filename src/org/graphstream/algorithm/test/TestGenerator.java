@@ -11,8 +11,8 @@ import org.graphstream.algorithm.generator.PreferentialAttachmentGenerator;
 import org.graphstream.algorithm.generator.RandomEuclideanGenerator;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.graphstream.oldUi.GraphViewerRemote;
 import org.graphstream.stream.Pipe;
+import org.graphstream.ui.old.GraphViewerRemote;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

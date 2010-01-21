@@ -28,12 +28,12 @@ import java.util.HashSet;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui2.graphicGraph.GraphicGraph;
-import org.graphstream.ui2.graphicGraph.GraphicSprite;
-import org.graphstream.ui2.graphicGraph.stylesheet.Style;
-import org.graphstream.ui2.graphicGraph.stylesheet.StyleConstants;
-import org.graphstream.ui2.spriteManager.Sprite;
-import org.graphstream.ui2.spriteManager.SpriteManager;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
+import org.graphstream.ui.graphicGraph.GraphicSprite;
+import org.graphstream.ui.graphicGraph.stylesheet.Style;
+import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 import org.junit.Test;
 
 import static org.junit.Assert.* ;

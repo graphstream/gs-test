@@ -27,12 +27,12 @@ import org.graphstream.graph.Element;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
-import org.graphstream.ui2.graphicGraph.StyleGroup;
-import org.graphstream.ui2.graphicGraph.StyleGroupSet;
-import org.graphstream.ui2.graphicGraph.StyleGroup.ElementEvents;
-import org.graphstream.ui2.graphicGraph.stylesheet.Rule;
-import org.graphstream.ui2.graphicGraph.stylesheet.Style;
-import org.graphstream.ui2.graphicGraph.stylesheet.StyleSheet;
+import org.graphstream.ui.graphicGraph.StyleGroup;
+import org.graphstream.ui.graphicGraph.StyleGroupSet;
+import org.graphstream.ui.graphicGraph.StyleGroup.ElementEvents;
+import org.graphstream.ui.graphicGraph.stylesheet.Rule;
+import org.graphstream.ui.graphicGraph.stylesheet.Style;
+import org.graphstream.ui.graphicGraph.stylesheet.StyleSheet;
 import org.junit.* ;
 import static org.junit.Assert.* ;
 

@@ -25,8 +25,8 @@ package org.graphstream.ui.viewer.test;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui2.swingViewer.ViewerListener;
-import org.graphstream.ui2.swingViewer.ViewerPipe;
+import org.graphstream.ui.swingViewer.ViewerListener;
+import org.graphstream.ui.swingViewer.ViewerPipe;
 
 /**
  * Test the viewer.

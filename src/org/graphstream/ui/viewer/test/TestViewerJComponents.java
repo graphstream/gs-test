@@ -29,10 +29,10 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.stream.ProxyPipe;
 import org.graphstream.stream.thread.ThreadProxyPipe;
-import org.graphstream.ui2.graphicGraph.stylesheet.StyleConstants;
-import org.graphstream.ui2.spriteManager.Sprite;
-import org.graphstream.ui2.spriteManager.SpriteManager;
-import org.graphstream.ui2.swingViewer.Viewer;
+import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
+import org.graphstream.ui.swingViewer.Viewer;
 
 public class TestViewerJComponents
 {

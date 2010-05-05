@@ -12,7 +12,7 @@ import org.graphstream.algorithm.generator.RandomEuclideanGenerator;
 import org.graphstream.algorithm.generator.RandomGenerator;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.stream.Pipe;
-import org.graphstream.ui.old.GraphViewerRemote;
+import org.graphstream.ui.swingViewer.Viewer;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -72,7 +72,7 @@ public class TestGenerator
 		if( gen instanceof Pipe )
 			g.addAttributeSink( (Pipe) gen );
 		
-		GraphViewerRemote gvr = g.oldDisplay();
+		Viewer gvr = g.display();
 		
 		gen.begin();
 		

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/stefan/graphstream/GraphStream-0.4.2/graphstream.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gs-algo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gs-core"/>
+	<classpathentry kind="lib" path="/gs-core/lib/util.jar"/>
+	<classpathentry kind="lib" path="/gs-core/lib/mbox2.jar"/>
+	<classpathentry kind="lib" path="/gs-core/lib/pherd.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JUnit4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gs-core-scala"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gs-ui-scala-svn"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

@@ -53,7 +53,7 @@ public class TestAStar
 		tas.testAStarDistances2();
 */		tas.setUp();
 		tas.testAStarMultiGraph();
-		tas.graph.oldDisplay();
+		tas.graph.display();
 	}
 
 	public Graph graph;

@@ -89,7 +89,7 @@ public class TestAPSP
 			System.out.printf( "%n" );
 		}
 		
-		G.oldDisplay();
+		G.display();
 	}
 	
 	protected void buildGraph( Graph G )

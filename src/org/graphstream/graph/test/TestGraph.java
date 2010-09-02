@@ -281,7 +281,7 @@ public class TestGraph
 		assertTrue( nodes.contains( C ) );
 		nodes.clear();
 		
-		for( Node node: graph.nodeSet() )
+		for( Node node: graph.getEachNode() )
 			nodes.add( node );
 		
 		assertEquals( 3, nodes.size() );
@@ -290,7 +290,7 @@ public class TestGraph
 		assertTrue( nodes.contains( C ) );
 		nodes.clear();
 		
-		for( Edge edge: graph.edgeSet() )
+		for( Edge edge: graph.getEachEdge() )
 			edges.add( edge );
 		
 		assertEquals( 3, edges.size() );

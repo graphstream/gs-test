@@ -76,7 +76,7 @@ public class TestGenerator
 		
 		gen.begin();
 		
-		while(i-->0) gen.nextElement();
+		while(i-->0) gen.nextEvents();
 		
 		gen.end();
 		

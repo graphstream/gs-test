@@ -58,7 +58,7 @@ public class TestLayoutAndViewer
 		gen.addSink( graph );
 		gen.begin();
 		for( int i=0; i<5000; i++ )
-			gen.nextElement();
+			gen.nextEvents();
 		gen.end();
 		
 		while( loop )

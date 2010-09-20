@@ -70,12 +70,9 @@ public class TestGenericity
 	protected static class MyALGNode
 		extends AdjacencyListNode
 	{
-		String algAttribute;
-		
 		public MyALGNode(Graph graph, String id)
 		{
 			super(graph, id);
-			algAttribute = String.format("alg/node/%s",id);
 		}
 	}
 	
@@ -91,12 +88,9 @@ public class TestGenericity
 	protected static class MyALGEdge
 		extends AdjacencyListEdge
 	{
-		String algAttribute;
-		
 		protected MyALGEdge(String id, Node src, Node dst, boolean directed)
 		{
 			super(id, src, dst, directed);
-			algAttribute = String.format("alg/edge/%s",id);
 		}
 	}
 	
@@ -403,9 +397,7 @@ public class TestGenericity
 			try
 			{
 				for( BadTypedNode badTypedNode : g.<BadTypedNode>getEachNode() )
-				{}
-				
-				fail();
+				{ fail(); }
 			}
 			catch( ClassCastException e ) {}
 			
@@ -526,9 +518,7 @@ public class TestGenericity
 			try
 			{
 				for( BadTypedEdge bte : g.<BadTypedEdge>getEachEdge() )
-				{}
-				
-				fail();
+				{ fail(); }
 			}
 			catch( ClassCastException e ) {}
 			
@@ -559,8 +549,9 @@ public class TestGenericity
 			try
 			{
 				Collection<BadTypedNode> cB = g.getNodeSet();
-				for( BadTypedNode n: cB );
-				fail();
+				
+				for( BadTypedNode n: cB )
+				{ fail(); }
 			}
 			catch(ClassCastException e) {}
 			
@@ -586,9 +577,8 @@ public class TestGenericity
 				while(iB.hasNext())
 				{
 					BadTypedNode btn = iB.next();
+					fail();
 				}
-				
-				fail();
 			}
 			catch(ClassCastException e) {}
 			
@@ -625,9 +615,8 @@ public class TestGenericity
 			try
 			{
 				Collection<BadTypedEdge> cB = g.getEdgeSet();
-				for( BadTypedEdge bte : cB );
-				
-				fail();
+				for( BadTypedEdge bte : cB )
+				{ fail(); }
 			}
 			catch(ClassCastException e) {}
 			
@@ -726,8 +715,8 @@ public class TestGenericity
 			
 			try
 			{
-				for( BadTypedEdge bte : root.<BadTypedEdge>getEdgeSet() );
-				fail();
+				for( BadTypedEdge bte : root.<BadTypedEdge>getEdgeSet() )
+				{ fail(); }
 			}
 			catch(ClassCastException e) {}
 			
@@ -736,9 +725,8 @@ public class TestGenericity
 				for( int i = 0; i < 10; i++ )
 				{
 					BadTypedEdge bte = g.getEdge( String.format("edge-%02d",i) );
+					fail();
 				}
-				
-				fail();
 			}
 			catch(ClassCastException e) {}
 			
@@ -750,9 +738,8 @@ public class TestGenericity
 				while(iB.hasNext())
 				{
 					 BadTypedEdge e = iB.next();
+					fail();
 				}
-				
-				fail();
 			}
 			catch(ClassCastException e) {}
 			catch(UnsupportedOperationException e) {}
@@ -765,9 +752,8 @@ public class TestGenericity
 				while(iB.hasNext())
 				{
 					BadTypedEdge e = iB.next();
+					fail();
 				}
-				
-				fail();
 			}
 			catch(ClassCastException e) {}
 			catch(UnsupportedOperationException e) {}
@@ -836,17 +822,15 @@ public class TestGenericity
 				while(iB.hasNext())
 				{
 					BadTypedNode node = iB.next();
+					fail();
 				}
-
-				fail();
 				
 				iB = root.getDepthFirstIterator();
 				while(iB.hasNext())
 				{
 					BadTypedNode node = iB.next();
+					fail();
 				}
-				
-				fail();
 			}
 			catch(ClassCastException e) {}
 			catch(UnsupportedOperationException e) {}

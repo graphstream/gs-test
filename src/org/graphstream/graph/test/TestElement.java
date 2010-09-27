@@ -245,20 +245,20 @@ public class TestElement
 		A.addAttribute( "I", "i" );
 		A.addAttribute( "Z", "z" );
 		
-		Object o = A.getFirstAttributeOf( "A", "B", "C", "I", "Z" );
+		String s = A.getFirstAttributeOf( "A", "B", "C", "I", "Z" );
 		
-		assertNotNull( o );
-		assertEquals( "c", o );
+		assertNotNull( s );
+		assertEquals( "c", s );
 		
 		// First attribute of 2.
 		
 		A.addAttribute( "J", 1 );
 		A.addAttribute( "X", 2 );
 		
-		o = A.getFirstAttributeOf( Number.class, "A", "B", "C", "I", "J", "X", "Z" );
+		Number n = A.getFirstAttributeOf( Number.class, "A", "B", "C", "I", "J", "X", "Z" );
 		
-		assertNotNull( o );
-		assertEquals( 1, o );
+		assertNotNull( n );
+		assertEquals( 1, n );
 	}
 	
 	@Test

@@ -35,7 +35,7 @@ public class TestViewerColorInterpolation implements ViewerListener
 {
 	public static void main( String args[] )
 	{
-		System.setProperty( "gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer" );
+		//System.setProperty( "gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer" );
 		
 		new TestViewerColorInterpolation();
 	}
@@ -47,15 +47,18 @@ public class TestViewerColorInterpolation implements ViewerListener
 		Graph      graph = new MultiGraph( "main graph" );
 		ViewerPipe pipe  = graph.display( false ).newViewerPipe();
 
+		//graph.addAttribute( "ui.quality" );
+		graph.addAttribute( "ui.antialias" );
+		
 		pipe.addViewerListener( this );
 		
 		Node A = graph.addNode( "A" );
 		Node B = graph.addNode( "B" );
 		Node C = graph.addNode( "C" );
 
-		graph.addEdge( "AB", "A", "B" );
-		graph.addEdge( "BC", "B", "C" );
-		graph.addEdge( "CA", "C", "A" );
+		graph.addEdge( "AB", "A", "B", true );
+		graph.addEdge( "BC", "B", "C", true );
+		graph.addEdge( "CA", "C", "A", true );
 		
 		A.addAttribute( "xyz", 0, 1, 0 );
 		B.addAttribute( "xyz", 1, 0, 0 );

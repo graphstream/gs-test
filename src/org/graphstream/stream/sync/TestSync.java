@@ -28,51 +28,43 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-public class TestSync
-{
+public class TestSync {
 	/**
 	 * Used to access to disableSync.
 	 */
-	class TestSinkTime
-		extends SinkTime
-	{
-		public boolean isSynchEnable()
-		{
-			return ! disableSync;
+	class TestSinkTime extends SinkTime {
+		public boolean isSynchEnable() {
+			return !disableSync;
 		}
 	}
-	
+
 	@Test
-	public void testSync()
-	{
-		TestSinkTime 	tst = new TestSinkTime();
-		SourceTime		st  = new SourceTime("test");
-		
-		if( tst.isSynchEnable() )
-		{
-			System.err.printf("sync is enable%n" );
-			
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			
+	public void testSync() {
+		TestSinkTime tst = new TestSinkTime();
+		SourceTime st = new SourceTime("test");
+
+		if (tst.isSynchEnable()) {
+			System.err.printf("sync is enable%n");
+
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+
 			long timeId = st.newEvent();
-			
-			assertTrue( tst.isNewEvent( st.getSourceId(), timeId ) );
-			assertFalse( tst.isNewEvent( st.getSourceId(), timeId ) );
-		}
-		else
-		{
-			System.err.printf("sync is disable%n" );
-			
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			assertTrue( tst.isNewEvent( st.getSourceId(), st.newEvent() ) );
-			
+
+			assertTrue(tst.isNewEvent(st.getSourceId(), timeId));
+			assertFalse(tst.isNewEvent(st.getSourceId(), timeId));
+		} else {
+			System.err.printf("sync is disable%n");
+
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+			assertTrue(tst.isNewEvent(st.getSourceId(), st.newEvent()));
+
 			long timeId = st.newEvent();
-			
-			assertTrue( tst.isNewEvent( st.getSourceId(), timeId ) );
-			assertTrue( tst.isNewEvent( st.getSourceId(), timeId ) );
+
+			assertTrue(tst.isNewEvent(st.getSourceId(), timeId));
+			assertTrue(tst.isNewEvent(st.getSourceId(), timeId));
 		}
 	}
 }

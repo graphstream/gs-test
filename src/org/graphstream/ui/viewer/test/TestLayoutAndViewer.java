@@ -32,54 +32,49 @@ import org.graphstream.ui.layout.Layout;
 import org.graphstream.ui.layout.springbox.SpringBox;
 import org.graphstream.ui.swingViewer.Viewer;
 
-public class TestLayoutAndViewer
-{
-	public static void main( String args[] )
-	{
+public class TestLayoutAndViewer {
+	public static void main(String args[]) {
 		new TestLayoutAndViewer();
 	}
-	
-	public TestLayoutAndViewer()
-	{
-		boolean   loop       = true;
-		Graph     graph      = new MultiGraph( "g1" );
-		Viewer    viewer     = new Viewer( new ThreadProxyPipe( graph ) );
+
+	public TestLayoutAndViewer() {
+		boolean loop = true;
+		Graph graph = new MultiGraph("g1");
+		Viewer viewer = new Viewer(new ThreadProxyPipe(graph));
 		ProxyPipe fromViewer = viewer.newThreadProxyOnGraphicGraph();
-		Layout    layout     = new SpringBox( false );
-		
-		graph.addAttribute( "ui.stylesheet", styleSheet );
-		fromViewer.addSink( graph );
-		viewer.addDefaultView( true );
-		graph.addSink( layout );
-		layout.addAttributeSink( graph );
+		Layout layout = new SpringBox(false);
+
+		graph.addAttribute("ui.stylesheet", styleSheet);
+		fromViewer.addSink(graph);
+		viewer.addDefaultView(true);
+		graph.addSink(layout);
+		layout.addAttributeSink(graph);
 
 		Generator gen = new DorogovtsevMendesGenerator();
-		
-		gen.addSink( graph );
+
+		gen.addSink(graph);
 		gen.begin();
-		for( int i=0; i<5000; i++ )
+		for (int i = 0; i < 5000; i++)
 			gen.nextEvents();
 		gen.end();
-		
-		while( loop )
-		{
+
+		while (loop) {
 			fromViewer.pump();
-			
-			if( graph.hasAttribute( "ui.viewClosed" ) )
-			{
+
+			if (graph.hasAttribute("ui.viewClosed")) {
 				loop = false;
-			}
-			else
-			{
-				try { Thread.sleep( 20 ); } catch(Exception e) {}
+			} else {
+				try {
+					Thread.sleep(20);
+				} catch (Exception e) {
+				}
 				layout.compute();
 			}
 		}
-		
-		System.exit( 0 );
+
+		System.exit(0);
 	}
-	
-	protected static String styleSheet =
-		"node { size: 3px; fill-color: rgb(150,150,150); }" +
-		"edge { fill-color: rgb(100,100,100); }";
+
+	protected static String styleSheet = "node { size: 3px; fill-color: rgb(150,150,150); }"
+			+ "edge { fill-color: rgb(100,100,100); }";
 }

@@ -26,108 +26,104 @@ import org.graphstream.stream.*;
 
 /**
  * Test the APSP algorithm.
- *
+ * 
  * @author Antoine Dutot
  * @since 2007
  */
-public class TestAPSP
-{
-	public static void main( String args[] )
-	{
-		try
-		{
-			new TestAPSP( args );
-		}
-		catch( Exception e )
-		{
+public class TestAPSP {
+	public static void main(String args[]) {
+		try {
+			new TestAPSP(args);
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit( 1 );
+			System.exit(1);
 		}
 	}
-	
-	public TestAPSP( String args[] ) throws IOException, GraphParseException
-	{
+
+	public TestAPSP(String args[]) throws IOException, GraphParseException {
 		String filename = null;
-		
-		if( args.length > 0 )
+
+		if (args.length > 0)
 			filename = args[0];
-		
-		Graph G = new DefaultGraph( "", false, true );
-		
-		if( filename == null )
-			 buildGraph( G );
-		else G.read( filename );
-		
-		APSP apsp = new APSP( G, "weight", true );
-		
+
+		Graph G = new DefaultGraph("", false, true);
+
+		if (filename == null)
+			buildGraph(G);
+		else
+			G.read(filename);
+
+		APSP apsp = new APSP(G, "weight", true);
+
 		apsp.compute();
-		
+
 		Iterator<? extends Node> nodes = G.getNodeIterator();
-		
-		while( nodes.hasNext() )
-		{
+
+		while (nodes.hasNext()) {
 			Node node = nodes.next();
-			
-			printNode( node );
+
+			printNode(node);
 			/*
-			float Dij = ((APSP.APSPInfo)node.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME)).getLengthTo( "D" );
-			
-			if( Dij >= 0 )
-				node.addAttribute( "label", node.getId()+" -("+Dij+")-> D" );
-			*/
-			
-			node.addAttribute( "label", node.getId() );
+			 * float Dij =
+			 * ((APSP.APSPInfo)node.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME
+			 * )).getLengthTo( "D" );
+			 * 
+			 * if( Dij >= 0 ) node.addAttribute( "label",
+			 * node.getId()+" -("+Dij+")-> D" );
+			 */
+
+			node.addAttribute("label", node.getId());
 		}
-		
-		if( G.getNode( "A" ) != null && G.getNode( "E" ) != null )
-		{
-			Path path = ((APSP.APSPInfo)(G.getNode("A").getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME))).getShortestPathTo( "E" );
-		
-			System.out.printf( "Path A -> E:%n    " );
-			for( Node node: path.getNodePath() )
-				System.err.printf( " -> %s", node.getId() );
-			System.out.printf( "%n" );
+
+		if (G.getNode("A") != null && G.getNode("E") != null) {
+			Path path = ((APSP.APSPInfo) (G.getNode("A")
+					.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME)))
+					.getShortestPathTo("E");
+
+			System.out.printf("Path A -> E:%n    ");
+			for (Node node : path.getNodePath())
+				System.err.printf(" -> %s", node.getId());
+			System.out.printf("%n");
 		}
-		
+
 		G.display();
 	}
-	
-	protected void buildGraph( Graph G )
-	{
-		Edge AB = G.addEdge( "AB", "A", "B", true );
-		Edge AC = G.addEdge( "AC", "C", "A", true );
-		Edge BC = G.addEdge( "BC", "B", "C", true );
-		Edge BD = G.addEdge( "BD", "D", "B", true );
-		Edge CD = G.addEdge( "CD", "C", "D", true );
-		Edge DE = G.addEdge( "DE", "D", "E", false );
-		
-		AB.addAttribute( "weight", 0.5f );
-		AB.addAttribute( "label", "0.5" );
-		AC.addAttribute( "weight", 0.5f );
-		AC.addAttribute( "label", "0.5" );
-		BC.addAttribute( "weight", 0.5f );
-		BC.addAttribute( "label", "0.5" );
-		BD.addAttribute( "weight", 0.5f );
-		BD.addAttribute( "label", "0.5" );
-		CD.addAttribute( "weight", 0.5f );
-		CD.addAttribute( "label", "0.5" );
-		DE.addAttribute( "weight", 0.5f );
-		DE.addAttribute( "label", "0.5" );
-	}
-	
-	protected void printNode( Node node )
-	{
-		APSP.APSPInfo info = (APSP.APSPInfo) node.getAttribute( APSP.APSPInfo.ATTRIBUTE_NAME );
 
-		if( info == null )
-			throw new RuntimeException( "Node "+node.getId()+" has no APSP info!!" );
-		
-		System.out.printf( "%s:%n", node.getId() );
-		
-		for( String other: info.targets.keySet() )
-		{
-			float Dij = info.targets.get( other ).distance;
-			System.out.printf( "    -> %s = %4.3f%n", other, Dij );
+	protected void buildGraph(Graph G) {
+		Edge AB = G.addEdge("AB", "A", "B", true);
+		Edge AC = G.addEdge("AC", "C", "A", true);
+		Edge BC = G.addEdge("BC", "B", "C", true);
+		Edge BD = G.addEdge("BD", "D", "B", true);
+		Edge CD = G.addEdge("CD", "C", "D", true);
+		Edge DE = G.addEdge("DE", "D", "E", false);
+
+		AB.addAttribute("weight", 0.5f);
+		AB.addAttribute("label", "0.5");
+		AC.addAttribute("weight", 0.5f);
+		AC.addAttribute("label", "0.5");
+		BC.addAttribute("weight", 0.5f);
+		BC.addAttribute("label", "0.5");
+		BD.addAttribute("weight", 0.5f);
+		BD.addAttribute("label", "0.5");
+		CD.addAttribute("weight", 0.5f);
+		CD.addAttribute("label", "0.5");
+		DE.addAttribute("weight", 0.5f);
+		DE.addAttribute("label", "0.5");
+	}
+
+	protected void printNode(Node node) {
+		APSP.APSPInfo info = (APSP.APSPInfo) node
+				.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+
+		if (info == null)
+			throw new RuntimeException("Node " + node.getId()
+					+ " has no APSP info!!");
+
+		System.out.printf("%s:%n", node.getId());
+
+		for (String other : info.targets.keySet()) {
+			float Dij = info.targets.get(other).distance;
+			System.out.printf("    -> %s = %4.3f%n", other, Dij);
 		}
 	}
 }

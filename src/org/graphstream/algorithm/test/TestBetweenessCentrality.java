@@ -88,12 +88,12 @@ public class TestBetweenessCentrality {
 		buildGraph1(graph, bcb);
 		bcb.init(graph);
 		bcb.compute();
-		assertEquals(1.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
-		assertEquals(1.0, (Double) graph.getNode("B").getAttribute("Cb"), 0.0);
-		assertEquals(3.0, (Double) graph.getNode("C").getAttribute("Cb"), 0.0);
-		assertEquals(3.0, (Double) graph.getNode("D").getAttribute("Cb"), 0.0);
-		assertEquals(1.0, (Double) graph.getNode("E").getAttribute("Cb"), 0.0);
-		assertEquals(3.0, (Double) graph.getNode("F").getAttribute("Cb"), 0.0);
+		assertEquals(1.0, (Float) graph.getNode("A").getAttribute("Cb"), 0.0);
+		assertEquals(1.0, (Float) graph.getNode("B").getAttribute("Cb"), 0.0);
+		assertEquals(3.0, (Float) graph.getNode("C").getAttribute("Cb"), 0.0);
+		assertEquals(3.0, (Float) graph.getNode("D").getAttribute("Cb"), 0.0);
+		assertEquals(1.0, (Float) graph.getNode("E").getAttribute("Cb"), 0.0);
+		assertEquals(3.0, (Float) graph.getNode("F").getAttribute("Cb"), 0.0);
 	}
 
 	@Test
@@ -103,10 +103,10 @@ public class TestBetweenessCentrality {
 		buildGraph2(graph, bcb);
 		bcb.init(graph);
 		bcb.compute();
-		assertEquals(4.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
-		assertEquals(0.0, (Double) graph.getNode("B").getAttribute("Cb"), 0.0);
-		assertEquals(0.0, (Double) graph.getNode("C").getAttribute("Cb"), 0.0);
-		assertEquals(4.0, (Double) graph.getNode("D").getAttribute("Cb"), 0.0);
+		assertEquals(4.0, (Float) graph.getNode("A").getAttribute("Cb"), 0.0);
+		assertEquals(0.0, (Float) graph.getNode("B").getAttribute("Cb"), 0.0);
+		assertEquals(0.0, (Float) graph.getNode("C").getAttribute("Cb"), 0.0);
+		assertEquals(4.0, (Float) graph.getNode("D").getAttribute("Cb"), 0.0);
 	}
 
 	@Test
@@ -116,26 +116,26 @@ public class TestBetweenessCentrality {
 		buildGraph3(graph, bcb);
 		bcb.init(graph);
 		bcb.compute();
-		assertEquals(6.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
-		assertEquals(0.0, (Double) graph.getNode("B").getAttribute("Cb"), 0.0);
-		assertEquals(6.0, (Double) graph.getNode("C").getAttribute("Cb"), 0.0);
-		assertEquals(8.0, (Double) graph.getNode("D").getAttribute("Cb"), 0.0);
-		assertEquals(0.0, (Double) graph.getNode("E").getAttribute("Cb"), 0.0);
+		assertEquals(6.0, (Float) graph.getNode("A").getAttribute("Cb"), 0.0);
+		assertEquals(0.0, (Float) graph.getNode("B").getAttribute("Cb"), 0.0);
+		assertEquals(6.0, (Float) graph.getNode("C").getAttribute("Cb"), 0.0);
+		assertEquals(8.0, (Float) graph.getNode("D").getAttribute("Cb"), 0.0);
+		assertEquals(0.0, (Float) graph.getNode("E").getAttribute("Cb"), 0.0);
 	}
 
-    protected static void buildGraph1(Graph graph, BetweennessCentrality bcb) {
-	//
-	// Unweighted graph:
-	//
-	//      F---E        Cb(A) = 1
-	//     /|    \       Cb(B) = 1
-	//    / |     \      Cb(C) = 3
-	//   /  |      \     Cb(D) = 3
-	//  A---C-------D    Cb(E) = 1
-	//   \  |     _/     Cb(F) = 3
-	//    \ |  __/
-	//     \|_/
-	//      B
+	protected static void buildGraph1(Graph graph, BetweennessCentrality bcb) {
+		//
+		// Unweighted graph:
+		//
+		//     F---E     Cb(A) = 1
+		//    /|    \    Cb(B) = 1
+		//   / |     \   Cb(C) = 3
+		//  /  |      \  Cb(D) = 3
+		// A---C-------D Cb(E) = 1
+		//  \  |     _/  Cb(F) = 3
+		//   \ |  __/
+		//    \|_/
+		//     B
 
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -168,17 +168,17 @@ public class TestBetweenessCentrality {
 		F.addAttribute("ui.label", "F");
 	}
 
-    protected static void buildGraph2(Graph graph, BetweennessCentrality bcb) {
-	//
-	// Weighted graph (edge BC=10, others=1):
-	//
-	//    B         Cb(A) = 4
-	//   / \10      Cb(B) = 0
-	//  /   \       Cb(C) = 0
-	// A     C      Cb(D) = 4
-	//  \   /
-	//   \ /
-	//    D
+	protected static void buildGraph2(Graph graph, BetweennessCentrality bcb) {
+		//
+		// Weighted graph (edge BC=10, others=1):
+		//
+		//    B     Cb(A) = 4
+		//   / \10  Cb(B) = 0
+		//  /   \   Cb(C) = 0
+		// A     C  Cb(D) = 4
+		//  \   /
+		//   \ /
+		//    D
 
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -202,17 +202,17 @@ public class TestBetweenessCentrality {
 		bcb.setWeight(B, C, 10f);
 	}
 
-    protected static void buildGraph3(Graph graph, BetweennessCentrality bcb) {
-	//
-	// Weighted graph (edge BC=10, others=1):
-	//
-	//    B         Cb(A) = 6   AB=1, AE=10, AD=1
-	//   /|\        Cb(B) = 0   BC=10, BE=10
-	//  / | \       Cb(C) = 6   CD=1, CE=1
-	// A--E--C      Cb(D) = 8   DE=10
-	//  \ | /       Cb(E) = 0
-	//   \|/
-	//    D
+	protected static void buildGraph3(Graph graph, BetweennessCentrality bcb) {
+		//
+		// Weighted graph (edge BC=10, others=1):
+		//
+		//    B     Cb(A) = 6   AB=1,  AE=10, AD=1
+		//   /|\    Cb(B) = 0   BC=10, BE=10
+		//  / | \   Cb(C) = 6   CD=1,  CE=1
+		// A--E--C  Cb(D) = 8   DE=10
+		//  \ | /   Cb(E) = 0
+		//   \|/
+		//    D
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
 		Node C = graph.addNode("C");

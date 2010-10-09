@@ -26,19 +26,16 @@ import org.graphstream.stream.file.FileSinkDGS;
 import org.graphstream.stream.file.FileSourceDGS;
 import org.junit.Before;
 
-public class TestFileSinkDGS extends TestFileSinkBase
-{
+public class TestFileSinkDGS extends TestFileSinkBase {
 	@Override
-    protected String aTemporaryGraphFileName()
-    {
-	    return "foo.dgs";
-    }
-	
+	protected String aTemporaryGraphFileName() {
+		return "foo.dgs";
+	}
+
 	@Before
 	@Override
-	public void setup()
-	{
-		input  = new FileSourceDGS();
+	public void setup() {
+		input = new FileSourceDGS();
 		output = new FileSinkDGS();
 	}
 }

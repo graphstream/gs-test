@@ -32,84 +32,75 @@ import org.graphstream.stream.file.FileSourceEdge;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestFileSourceEdge extends TestFileSourceBase
-{
-// Before
-	
+public class TestFileSourceEdge extends TestFileSourceBase {
+	// Before
+
 	@Before
-	public void setUp()
-	{
-		graph = new MultiGraph( "g1" );
+	public void setUp() {
+		graph = new MultiGraph("g1");
 		input = new FileSourceEdge();
 		testEdgeIds = false;
 	}
-	
-	public static void main( String args[] )
-	{
+
+	public static void main(String args[]) {
 		TestFileSourceEdge fid = new TestFileSourceEdge();
-		
+
 		fid.setUp();
 		fid.test_Access_ReadAll_Stream();
 	}
-	
-// Test
-	
+
+	// Test
+
 	@Override
-	public String anUndirectedTriangle() { return TEST1_TRIANGLE; }
-	
-	protected static String TEST1_TRIANGLE =
-		"A B\n" +
-		"B C\n" +
-		"C A\n";
-	
+	public String anUndirectedTriangle() {
+		return TEST1_TRIANGLE;
+	}
+
+	protected static String TEST1_TRIANGLE = "A B\n" + "B C\n" + "C A\n";
+
 	@Override
-	public String aDirectedTriangle() { return TEST2_DIRECTED_TRIANGLE; }
-	
-	protected static String TEST2_DIRECTED_TRIANGLE =
-		"A B\n" +
-		"B C\n" +
-		"A C\n";
-	
+	public String aDirectedTriangle() {
+		return TEST2_DIRECTED_TRIANGLE;
+	}
+
+	protected static String TEST2_DIRECTED_TRIANGLE = "A B\n" + "B C\n"
+			+ "A C\n";
+
 	@Override
-	public String basicAttributes() { return ""; }
+	public String basicAttributes() {
+		return "";
+	}
 
 	@Test
 	@Override
 	@SuppressWarnings("deprecation")
-	public void test_DirectedTriangle()
-	{
-		input = new FileSourceEdge( true );
-		
-		try
-		{
-			input.addSink( graph );
-			input.readAll( new StringReader( aDirectedTriangle() ) );
-			graph.getNode("B").getEdgeToward("C").setDirected( false );
+	public void test_DirectedTriangle() {
+		input = new FileSourceEdge(true);
+
+		try {
+			input.addSink(graph);
+			input.readAll(new StringReader(aDirectedTriangle()));
+			graph.getNode("B").getEdgeToward("C").setDirected(false);
 			directedTriangleTests();
-		}
-		catch( IOException e )
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
-			assertTrue( "IOException, should not happen" + e.getMessage(), false );
+			assertTrue("IOException, should not happen" + e.getMessage(), false);
 		}
 	}
-	
+
 	@Test
 	@Override
-	public void test_Attributes()
-	{
+	public void test_Attributes() {
 		// NOP, edge format does not allow attributes.
 	}
-	
+
 	@Override
-	public String anUndirectedTriangleFileName()
-	{
-		return "src/org/graphstream/stream/file/test/data/undirectedTriangle.edge";		
+	public String anUndirectedTriangleFileName() {
+		return "src/org/graphstream/stream/file/test/data/undirectedTriangle.edge";
 	}
-	
+
 	@Override
-	public String anUndirectedTriangleHttpURL()
-	{
+	public String anUndirectedTriangleHttpURL() {
 		return "http://graphstream.sourceforge.net/data/undirectedTriangle.edge";
 	}
 }

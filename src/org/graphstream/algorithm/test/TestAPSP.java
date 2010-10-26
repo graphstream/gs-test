@@ -21,14 +21,15 @@ import java.util.Iterator;
 
 import org.graphstream.algorithm.*;
 import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.*;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
 
 /**
  * Test the APSP algorithm.
- * 
- * @author Antoine Dutot
- * @since 2007
  */
 public class TestAPSP {
 	public static void main(String args[]) {
@@ -39,6 +40,10 @@ public class TestAPSP {
 			System.exit(1);
 		}
 	}
+	
+	public TestAPSP() {
+		
+	}
 
 	public TestAPSP(String args[]) throws IOException, GraphParseException {
 		String filename = null;
@@ -46,10 +51,10 @@ public class TestAPSP {
 		if (args.length > 0)
 			filename = args[0];
 
-		Graph G = new DefaultGraph("", false, true);
+		Graph G = new SingleGraph("", false, true);
 
 		if (filename == null)
-			buildGraph(G);
+			buildGraph1(G);
 		else
 			G.read(filename);
 
@@ -76,9 +81,8 @@ public class TestAPSP {
 		}
 
 		if (G.getNode("A") != null && G.getNode("E") != null) {
-			Path path = ((APSP.APSPInfo) (G.getNode("A")
-					.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME)))
-					.getShortestPathTo("E");
+			APSP.APSPInfo info = G.getNode("A").getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+			Path path = info.getShortestPathTo("E");
 
 			System.out.printf("Path A -> E:%n    ");
 			for (Node node : path.getNodePath())
@@ -88,8 +92,66 @@ public class TestAPSP {
 
 		G.display();
 	}
+	
+	@Test
+	public void Test1() {
+		Graph G = new SingleGraph("", false, true);
 
-	protected void buildGraph(Graph G) {
+		buildGraph1(G);
+
+		APSP apsp = new APSP(G, "weight", true);
+
+		apsp.compute();
+
+		Node A = G.getNode("A");
+		Node B = G.getNode("B");
+		Node C = G.getNode("C");
+		Node D = G.getNode("D");
+		Node E = G.getNode("E");
+		
+		APSP.APSPInfo info = A.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+		Path path = info.getShortestPathTo("E");
+		Object npath[] = path.getNodePath().toArray();
+		Object npath1[] = { A, B, C, D, E };
+
+		assertEquals(5, path.getNodeCount(), 0);
+		assertArrayEquals(npath1, npath);
+
+		assertEquals(0.5, info.getLengthTo("B"), 0);
+		assertEquals(1.0, info.getLengthTo("C"), 0);
+		assertEquals(1.5, info.getLengthTo("D"), 0);
+		assertEquals(2.0, info.getLengthTo("E"), 0);
+		
+		path = info.getShortestPathTo("C");
+		npath = path.getNodePath().toArray();
+		Object npath2[] = { A, B, C };
+		
+		assertEquals(3, path.getNodeCount(), 0);
+		assertArrayEquals(npath2, npath);
+		
+		info = E.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+		path = info.getShortestPathTo("C");
+		npath = path.getNodePath().toArray();
+		Object npath3[] = { E, D, B, C };
+		
+		assertEquals(4, path.getNodeCount(), 0);
+		assertArrayEquals(npath3, npath);
+
+		assertEquals(2.0, info.getLengthTo("A"), 0);
+		assertEquals(1.0, info.getLengthTo("B"), 0);
+		assertEquals(1.5, info.getLengthTo("C"), 0);
+		assertEquals(0.5, info.getLengthTo("D"), 0);		
+	}
+
+	protected void buildGraph1(Graph G) {
+		// 
+		//  +--0.5-->B<--0.5--+
+		//  |        |        |
+		// 0.5      0.5      0.5
+		//  |        v        |
+		//  A<--0.5--C--0.5-->D--0.5--E
+		//
+		
 		Edge AB = G.addEdge("AB", "A", "B", true);
 		Edge AC = G.addEdge("AC", "C", "A", true);
 		Edge BC = G.addEdge("BC", "B", "C", true);

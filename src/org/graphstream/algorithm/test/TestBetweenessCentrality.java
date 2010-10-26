@@ -3,95 +3,42 @@ package org.graphstream.algorithm.test;
 import java.util.Collection;
 
 import org.graphstream.algorithm.BetweennessCentrality;
-//import org.graphstream.graph.Edge;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-//import org.graphstream.ui.swingViewer.Viewer;
-//import org.graphstream.ui.swingViewer.ViewerListener;
-//import org.graphstream.ui.swingViewer.ViewerPipe;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TestBetweenessCentrality {
 
-	protected static boolean loop = true;
-
 	/**
 	 * Quick manual test of the centrality algorithm.
 	 */
 	public static void main(String args[]) {
-		// System.setProperty( "gs.ui.renderer",
-		// "org.graphstream.ui.j2dviewer.J2DGraphRenderer" );
-
 		Graph graph = new SingleGraph("Betweeness Centrality");
 
-//		Viewer viewer = graph.display(true);
-//		ViewerPipe pipeIn = viewer.newViewerPipe();
-//
-//		pipeIn.addViewerListener(new ViewerListener() {
-//			public void viewClosed(String id) {
-//				loop = false;
-//			}
-//
-//			public void buttonPushed(String id) {
-//			}
-//
-//			public void buttonReleased(String id) {
-//			}
-//		});
+		BetweennessCentrality bcb = new BetweennessCentrality();
 
-		graph.addAttribute("ui.stylesheet", styleSheet);
-		graph.addAttribute("ui.antialias");
-		graph.addAttribute("ui.quality");
+		buildGraph2(graph, bcb);
 
-		BetweennessCentrality bcb = new BetweennessCentrality(true);
-
-		buildGraph6(graph, bcb);
-
+		bcb.setWeightAttributeName("weight");
+//		for(Edge edge:graph.getEachEdge()) {edge.setAttribute("weight",1.0);}
 		bcb.betweennessCentrality(graph);
 
-//		for (Node node : graph) {
-//			node.setAttribute(
-//					"ui.label",
-//					String.format("%s C=%.2f", node.getId(),
-//							bcb.centrality(node)));
-//			System.out.printf("Cb(%s) = %f%n", node.getId(), bcb.centrality(node));
-//		}
 		
 		System.out.printf("Cb(%s) = %f%n", graph.getNode("A").getId(), bcb.centrality(graph.getNode("A")));
 		System.out.printf("Cb(%s) = %f%n", graph.getNode("B").getId(), bcb.centrality(graph.getNode("B")));
 		System.out.printf("Cb(%s) = %f%n", graph.getNode("C").getId(), bcb.centrality(graph.getNode("C")));
 		System.out.printf("Cb(%s) = %f%n", graph.getNode("D").getId(), bcb.centrality(graph.getNode("D")));
-		System.out.printf("Cb(%s) = %f%n", graph.getNode("E").getId(), bcb.centrality(graph.getNode("E")));
-
-//		for (Edge edge : graph.getEachEdge()) {
-//			edge.setAttribute(
-//					"ui.label",
-//					String.format("%.2f",
-//							bcb.weight(edge.getNode0(), edge.getNode1())));
-//		}
-
-//		while (loop) {
-//			pipeIn.pump();
-//			sleep(4);
-//		}
-//
-//		System.exit(0);
-	}
-
-	protected static void sleep(long ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (Exception e) {
-		}
+//		System.out.printf("Cb(%s) = %f%n", graph.getNode("E").getId(), bcb.centrality(graph.getNode("E")));
 	}
 
 	@Test
 	public void test1() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 1");
-		BetweennessCentrality bcb = new BetweennessCentrality(false /* unweighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality(/* unweighted */);
 		buildGraph1(graph, bcb);
 		bcb.init(graph);
 		bcb.compute();
@@ -106,8 +53,9 @@ public class TestBetweenessCentrality {
 	@Test
 	public void test1b() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 1 (b)");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph1b(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(1.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
@@ -121,8 +69,9 @@ public class TestBetweenessCentrality {
 	@Test
 	public void test2() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 2");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph2(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(4.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
@@ -131,11 +80,37 @@ public class TestBetweenessCentrality {
 		assertEquals(4.0, (Double) graph.getNode("D").getAttribute("Cb"), 0.0);
 	}
 
+	protected void testIfWeightedAndUnweightedAreEqual(Graph graph1, Graph graph2, BetweennessCentrality bcb) {
+		for(Edge edge:graph1.getEachEdge()) { edge.setAttribute("weight", 1); }
+		for(Edge edge:graph2.getEachEdge()) { edge.setAttribute("weight", 1); }
+		bcb.setUnweighted();
+		bcb.init(graph1);
+		bcb.compute();
+		bcb.setWeightAttributeName("weight");
+		bcb.init(graph2);
+		bcb.compute();
+
+		for(Node node: graph1) {
+			assertEquals((Double)node.getAttribute("Cb"), (Double)graph2.getNode(node.getId()).getAttribute("Cb"),0);
+		}
+	}
+
+	@Test
+	public void test2b() {
+		Graph graph1 = new SingleGraph("Betweenness Centrality Test 2 (b) 1");
+		Graph graph2 = new SingleGraph("Betweenness Centrality Test 2 (b) 2");
+		BetweennessCentrality bcb = new BetweennessCentrality();
+		buildGraph2(graph1, bcb);
+		buildGraph2(graph2, bcb);
+		testIfWeightedAndUnweightedAreEqual(graph1, graph2, bcb);
+	}
+	
 	@Test
 	public void test3() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 3");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph3(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(6.0, (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
@@ -146,10 +121,21 @@ public class TestBetweenessCentrality {
 	}
 
 	@Test
+	public void test3b() {
+		Graph graph1 = new SingleGraph("Betweenness Centrality Test 3 (b) 1");
+		Graph graph2 = new SingleGraph("Betweenness Centrality Test 3 (b) 2");
+		BetweennessCentrality bcb = new BetweennessCentrality();
+		buildGraph3(graph1, bcb);
+		buildGraph3(graph2, bcb);
+		testIfWeightedAndUnweightedAreEqual(graph1, graph2, bcb);
+	}
+
+	@Test
 	public void test4() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 4");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph4(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(0.0, (Double) graph.getNode("0").getAttribute("Cb"), 0.0);
@@ -160,10 +146,21 @@ public class TestBetweenessCentrality {
 	}
 	
 	@Test
+	public void test4b() {
+		Graph graph1 = new SingleGraph("Betweenness Centrality Test 4 (b) 1");
+		Graph graph2 = new SingleGraph("Betweenness Centrality Test 4 (b) 2");
+		BetweennessCentrality bcb = new BetweennessCentrality();
+		buildGraph4(graph1, bcb);
+		buildGraph4(graph2, bcb);
+		testIfWeightedAndUnweightedAreEqual(graph1, graph2, bcb);
+	}
+	
+	@Test
 	public void test5() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 5");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph5(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(0.0,    (Double) graph.getNode("A").getAttribute("Cb"), 0.0);
@@ -172,12 +169,23 @@ public class TestBetweenessCentrality {
 		assertEquals(8.3333, (Double) graph.getNode("D").getAttribute("Cb"), 0.01);
 		assertEquals(2.6666, (Double) graph.getNode("E").getAttribute("Cb"), 0.01);
 	}
+
+	@Test
+	public void test5b() {
+		Graph graph1 = new SingleGraph("Betweenness Centrality Test 5 (b) 1");
+		Graph graph2 = new SingleGraph("Betweenness Centrality Test 5 (b) 2");
+		BetweennessCentrality bcb = new BetweennessCentrality();
+		buildGraph5(graph1, bcb);
+		buildGraph5(graph2, bcb);
+		testIfWeightedAndUnweightedAreEqual(graph1, graph2, bcb );
+	}
 	
 	@Test
 	public void test6() {
 		Graph graph = new SingleGraph("Betweeness Centrality Test 6");
-		BetweennessCentrality bcb = new BetweennessCentrality(true /* weighted */);
+		BetweennessCentrality bcb = new BetweennessCentrality();
 		buildGraph6(graph, bcb);
+		bcb.setWeightAttributeName("weight");
 		bcb.init(graph);
 		bcb.compute();
 		assertEquals(4, (Double) graph.getNode("A").getAttribute("Cb"), 0);
@@ -186,6 +194,16 @@ public class TestBetweenessCentrality {
 		assertEquals(2, (Double) graph.getNode("D").getAttribute("Cb"), 0);
 		assertEquals(4, (Double) graph.getNode("E").getAttribute("Cb"), 0);
 	}	
+
+	@Test
+	public void test6b() {
+		Graph graph1 = new SingleGraph("Betweenness Centrality Test 6 (b) 1");
+		Graph graph2 = new SingleGraph("Betweenness Centrality Test 6 (b) 2");
+		BetweennessCentrality bcb = new BetweennessCentrality();
+		buildGraph6(graph1, bcb);
+		buildGraph6(graph2, bcb);
+		testIfWeightedAndUnweightedAreEqual(graph1, graph2, bcb );
+	}
 
 	protected static void buildGraph1(Graph graph, BetweennessCentrality bcb) {
 		//

@@ -95,7 +95,7 @@ public class TestAPSP {
 	
 	@Test
 	public void Test1() {
-		Graph G = new SingleGraph("", false, true);
+		Graph G = new SingleGraph("Test APSP 1", false, true);
 
 		buildGraph1(G);
 
@@ -142,6 +142,83 @@ public class TestAPSP {
 		assertEquals(1.5, info.getLengthTo("C"), 0);
 		assertEquals(0.5, info.getLengthTo("D"), 0);		
 	}
+	
+	@Test
+	public void Test2() {
+		Graph G = new SingleGraph("Test APSP 2", false, true);
+		
+		buildGraph2(G);
+		
+		APSP apsp = new APSP(G, "weight", true);
+		
+		apsp.compute();
+		
+		Node A = G.getNode("A");
+		Node B = G.getNode("B");
+		Node C = G.getNode("C");
+		Node D = G.getNode("D");
+		
+		APSP.APSPInfo info = A.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+		Path path = info.getShortestPathTo("C");
+		Object npath[] = path.getNodePath().toArray();
+		Object npath1[] = { A, D, C };
+		
+		assertEquals(3, path.getNodeCount(), 0);
+		assertArrayEquals(npath, npath1);
+		
+		assertEquals(1.0, info.getLengthTo("B"), 0);
+		assertEquals(2.0, info.getLengthTo("C"), 0);
+		assertEquals(1.0, info.getLengthTo("D"), 0);
+		
+		info = B.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+		path = info.getShortestPathTo("C");
+		npath = path.getNodePath().toArray();
+		Object npath2[] = { B, A, D, C };
+		
+		assertEquals(4, path.getNodeCount(), 0);
+		assertArrayEquals(npath, npath2);
+		
+		assertEquals(1.0, info.getLengthTo("A"), 0);
+		assertEquals(3.0, info.getLengthTo("C"), 0);
+		assertEquals(2.0, info.getLengthTo("D"), 0);
+	}
+	
+	@Test
+	public void Test3() {
+		Graph G = new SingleGraph("Test APSP 3", false, true);
+		
+		buildGraph3(G);
+		
+		APSP apsp = new APSP(G, "weight", true);
+		
+		apsp.compute();
+		
+		Node A = G.getNode("A");
+		Node B = G.getNode("B");
+		Node C = G.getNode("C");
+		Node D = G.getNode("D");
+		Node E = G.getNode("E");
+		
+		APSP.APSPInfo info = A.getAttribute(APSP.APSPInfo.ATTRIBUTE_NAME);
+		Path path = info.getShortestPathTo("B");
+		Object npath[] = path.getNodePath().toArray();
+		Object npath1[] = { A, D, B };	// ? Or A, D, E, B ? There are two paths.
+
+		assertEquals(3, path.getNodeCount(), 0);
+		assertArrayEquals(npath, npath1);
+		
+		assertEquals(5.0, info.getLengthTo("B"), 0);
+		assertEquals(3.0, info.getLengthTo("C"), 0);
+		assertEquals(1.0, info.getLengthTo("D"), 0);
+		assertEquals(2.0, info.getLengthTo("E"), 0);
+		
+		path = info.getShortestPathTo("C");
+		npath = path.getNodePath().toArray();
+		Object npath2[] = { A, C };
+		
+		assertEquals(2, path.getNodeCount(), 0);
+		assertArrayEquals(npath, npath2);
+	}
 
 	protected void buildGraph1(Graph G) {
 		// 
@@ -171,6 +248,76 @@ public class TestAPSP {
 		CD.addAttribute("label", "0.5");
 		DE.addAttribute("weight", 0.5f);
 		DE.addAttribute("label", "0.5");
+	}
+
+	protected static void buildGraph2(Graph graph) {
+		//
+		// Weighted graph (edge BC=10, others=1):
+		//
+		//    B
+		//   / \10
+		//  /   \
+		// A     C
+		//  \   /
+		//   \ /
+		//    D
+
+		Node A = graph.addNode("A");
+		Node B = graph.addNode("B");
+		Node C = graph.addNode("C");
+		Node D = graph.addNode("D");
+
+		graph.addEdge("AB", "A", "B");
+		graph.addEdge("BC", "B", "C");
+		graph.addEdge("CD", "C", "D");
+		graph.addEdge("DA", "D", "A");
+
+		A.addAttribute("xyz", -1, 0);
+		A.addAttribute("ui.label", "A");
+		B.addAttribute("xyz", 0, 1);
+		B.addAttribute("ui.label", "B");
+		C.addAttribute("xyz", 1, 0);
+		C.addAttribute("ui.label", "C");
+		D.addAttribute("xyz", 0, -1);
+		D.addAttribute("ui.label", "D");
+
+		graph.getEdge("BC").setAttribute("weight", 10.0);
+	}
+
+	protected static void buildGraph3(Graph graph) {
+		//    B---     A-B = 10, A-C = 3, A-D = 1
+		//   /|\  \    B-C = 6,  B-D = 4, B-E = 3
+		//  / | \  \   C-D = 2,  C-E = 10
+		// A--+--\--D  D-E = 1
+		//  \ | __\/|  This graph allows mutliple shortest paths between several nodes. 
+		//   \|/   \|  
+		//    C-----E  
+		
+		Node A = graph.addNode("A");
+		Node B = graph.addNode("B");
+		Node C = graph.addNode("C");
+		Node D = graph.addNode("D");
+		Node E = graph.addNode("E");
+
+		Edge AB = graph.addEdge("AB", "A", "B");
+		Edge AC = graph.addEdge("AC", "A", "C");
+		Edge AD = graph.addEdge("AD", "A", "D");
+		Edge BC = graph.addEdge("BC", "B", "C");
+		Edge BD = graph.addEdge("BD", "B", "D");
+		Edge CD = graph.addEdge("CD", "C", "D");
+		Edge EC = graph.addEdge("EC", "E", "C");
+		Edge EB = graph.addEdge("EB", "E", "B");
+		Edge ED = graph.addEdge("ED", "E", "D");
+
+		AB.setAttribute("weight", 10);
+		AC.setAttribute("weight", 3);
+		AD.setAttribute("weight", 1);
+		BC.setAttribute("weight", 6);
+		BD.setAttribute("weight", 4);
+		CD.setAttribute("weight", 2);
+		EC.setAttribute("weight", 10);
+		EB.setAttribute("weight", 3);
+		ED.setAttribute("weight", 1);
 	}
 
 	protected void printNode(Node node) {

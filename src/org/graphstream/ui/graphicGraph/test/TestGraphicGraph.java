@@ -25,15 +25,11 @@ package org.graphstream.ui.graphicGraph.test;
 import java.awt.Color;
 import java.util.HashSet;
 
-import org.graphstream.graph.Element;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.graphicGraph.GraphicGraph;
-import org.graphstream.ui.graphicGraph.GraphicSprite;
-import org.graphstream.ui.graphicGraph.stylesheet.Style;
-import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants;
-import org.graphstream.ui.spriteManager.Sprite;
-import org.graphstream.ui.spriteManager.SpriteManager;
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.graphicGraph.*;
+import org.graphstream.ui.graphicGraph.stylesheet.*;
+import org.graphstream.ui.spriteManager.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -140,63 +136,63 @@ public class TestGraphicGraph {
 		// Look at the default style sheet.
 
 		assertNotNull(outGraph.getStyle());
-		assertNotNull(outGraph.getNode("A").getStyle());
-		assertNotNull(outGraph.getNode("B").getStyle());
-		assertNotNull(outGraph.getNode("C").getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("A")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("B")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("C")).getStyle());
 
 		testStyle(outGraph.getStyle(), Color.WHITE);
-		testStyle(outGraph.getNode("A").getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("B").getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("C").getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("A")).getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("B")).getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("C")).getStyle(), Color.BLACK);
 
 		// Load a style sheet by URL.
 
 		outGraph.addAttribute("stylesheet", styleSheet1);
 
 		assertNotNull(outGraph.getStyle());
-		assertNotNull(outGraph.getNode("A").getStyle());
-		assertNotNull(outGraph.getNode("B").getStyle());
-		assertNotNull(outGraph.getNode("C").getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("A")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("B")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("C")).getStyle());
 
 		testStyle(outGraph.getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("A").getStyle(), Color.RED);
-		testStyle(outGraph.getNode("B").getStyle(), Color.BLUE);
-		testStyle(outGraph.getNode("C").getStyle(), Color.WHITE);
+		testStyle(((GraphicNode)outGraph.getNode("A")).getStyle(), Color.RED);
+		testStyle(((GraphicNode)outGraph.getNode("B")).getStyle(), Color.BLUE);
+		testStyle(((GraphicNode)outGraph.getNode("C")).getStyle(), Color.WHITE);
 
 		// Cascade a style sheet by string.
 
 		outGraph.addAttribute("stylesheet", "node#A { fill-color: green; }");
 
 		assertNotNull(outGraph.getStyle());
-		assertNotNull(outGraph.getNode("A").getStyle());
-		assertNotNull(outGraph.getNode("B").getStyle());
-		assertNotNull(outGraph.getNode("C").getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("A")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("B")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("C")).getStyle());
 
 		testStyle(outGraph.getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("A").getStyle(), Color.GREEN);
-		testStyle(outGraph.getNode("B").getStyle(), Color.BLUE);
-		testStyle(outGraph.getNode("C").getStyle(), Color.WHITE);
+		testStyle(((GraphicNode)outGraph.getNode("A")).getStyle(), Color.GREEN);
+		testStyle(((GraphicNode)outGraph.getNode("B")).getStyle(), Color.BLUE);
+		testStyle(((GraphicNode)outGraph.getNode("C")).getStyle(), Color.WHITE);
 
 		// Cascade individual styles on elements.
 
 		outGraph.getNode("A").addAttribute("ui.style", "fill-color: blue;");
 
-		assertNotNull(outGraph.getNode("A").getStyle());
-		testStyle(outGraph.getNode("A").getStyle(), Color.BLUE);
+		assertNotNull(((GraphicNode)outGraph.getNode("A")).getStyle());
+		testStyle(((GraphicNode)outGraph.getNode("A")).getStyle(), Color.BLUE);
 
 		// Clear style.
 
 		outGraph.getStyleSheet().clear();
 
 		assertNotNull(outGraph.getStyle());
-		assertNotNull(outGraph.getNode("A").getStyle());
-		assertNotNull(outGraph.getNode("B").getStyle());
-		assertNotNull(outGraph.getNode("C").getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("A")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("B")).getStyle());
+		assertNotNull(((GraphicNode)outGraph.getNode("C")).getStyle());
 
 		testStyle(outGraph.getStyle(), Color.WHITE);
-		testStyle(outGraph.getNode("A").getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("B").getStyle(), Color.BLACK);
-		testStyle(outGraph.getNode("C").getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("A")).getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("B")).getStyle(), Color.BLACK);
+		testStyle(((GraphicNode)outGraph.getNode("C")).getStyle(), Color.BLACK);
 	}
 
 	protected void testStyle(Style style, Color colorBase) {

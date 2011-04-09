@@ -52,6 +52,7 @@ public class TestLayoutAndViewer {
 		ProxyPipe fromViewer = viewer.newThreadProxyOnGraphicGraph();
 		Layout layout = new SpringBox(false);
 
+		graph.addAttribute("ui.antialias");
 		graph.addAttribute("ui.stylesheet", styleSheet);
 		fromViewer.addSink(graph);
 		viewer.addDefaultView(true);

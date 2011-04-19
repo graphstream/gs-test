@@ -32,6 +32,7 @@ package org.graphstream.algorithm.test;
 
 import javax.swing.JOptionPane;
 
+import org.graphstream.algorithm.generator.BarabasiAlbertGenerator;
 import org.graphstream.algorithm.generator.DorogovtsevMendesGenerator;
 import org.graphstream.algorithm.generator.FullGenerator;
 import org.graphstream.algorithm.generator.Generator;
@@ -85,6 +86,16 @@ public class TestGenerator {
 	public void testDorogovtsevMendesGenerator() {
 		testGenerator(new DorogovtsevMendesGenerator(),
 				"DorogovtsevMendesGenerator", 100);
+	}
+	
+	@Test
+	public void testBarabasiAlbertGenerator() {
+		testGenerator(new BarabasiAlbertGenerator(3), "Barabási-Albert Generator (3)", 100);
+	}
+	
+	@Test
+	public void testBarabasiAlbertGenerator2() {
+		testGenerator(new BarabasiAlbertGenerator(3, true), "Barabási-Albert Generator (3, true)", 100);
 	}
 
 	protected void testGenerator(Generator gen, String name, int size) {

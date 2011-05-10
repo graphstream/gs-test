@@ -39,6 +39,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AdjacencyListGraph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.graph.implementations.MultiNode;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Test;
 
@@ -252,6 +253,38 @@ public class TestGraph {
 		assertEquals(BC, C.getEdgeToward("B"));
 	}
 
+	@Test
+	public void testMulti() {
+		MultiGraph graph = new MultiGraph("g");
+		MultiNode A = graph.addNode("A");
+		MultiNode B = graph.addNode("B");
+		
+		graph.addEdge("AB1", "A", "B");
+		graph.addEdge("AB2", "A", "B");
+		
+		assertEquals(2, A.getDegree());
+		assertEquals(2, B.getDegree());
+	}
+	
+	@Test
+	public void testSingle() {
+		SingleGraph graph = new SingleGraph("g");
+		Node A = graph.addNode("A");
+		Node B = graph.addNode("B");
+		
+		graph.addEdge("AB1", "A", "B");
+		
+		try {
+			graph.addEdge("AB2", "A", "B");
+			fail();
+		} catch(Exception e) {
+			// Ok !
+		}
+		
+		assertEquals(1, A.getDegree());
+		assertEquals(1, B.getDegree());
+	}
+	
 	@Test
 	public void testIterables() {
 		testIterables(new SingleGraph("sg"));

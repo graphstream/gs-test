@@ -161,7 +161,6 @@ public class TestGraph {
 		// testDirected( new AdjacencyListGraph( "alg" ) );
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void testDirected(Graph graph) {
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -218,8 +217,10 @@ public class TestGraph {
 		//
 		// BC changes its direction, and AB becomes directed.
 
-		BC.switchDirection();
-		AB.setDirected(true);
+		graph.removeEdge("BC");
+		BC = graph.addEdge("BC", "C", "B", true);
+		graph.removeEdge("AB");
+		AB = graph.addEdge("AB", "A", "B", true);
 
 		assertTrue(AB.isDirected());
 		assertTrue(BC.isDirected());
@@ -258,7 +259,6 @@ public class TestGraph {
 		// testIterables( new AdjacencyListGraph( "alg" ) );
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void testIterables(Graph graph) {
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -334,8 +334,12 @@ public class TestGraph {
 		assertTrue(edges.contains(CA));
 		edges.clear();
 
-		AB.setDirected(true);
-		BC.setDirected(true);
+		graph.removeEdge("AB");
+		AB = graph.addEdge("AB", "A", "B", true);
+		
+		graph.removeEdge("BC");
+		BC = graph.addEdge("BC", "B", "C", true);
+		
 		// A
 		// |\
 		// | \

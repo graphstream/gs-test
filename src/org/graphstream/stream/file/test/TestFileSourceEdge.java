@@ -81,14 +81,15 @@ public class TestFileSourceEdge extends TestFileSourceBase {
 
 	@Test
 	@Override
-	@SuppressWarnings("deprecation")
 	public void test_DirectedTriangle() {
 		input = new FileSourceEdge(true);
 
 		try {
 			input.addSink(graph);
 			input.readAll(new StringReader(aDirectedTriangle()));
-			graph.getNode("B").getEdgeToward("C").setDirected(false);
+			String BCid = graph.getNode("B").getEdgeToward("C").getId();
+			graph.removeEdge(BCid);
+			graph.addEdge(BCid, "B", "C", false);
 			directedTriangleTests();
 		} catch (IOException e) {
 			e.printStackTrace();

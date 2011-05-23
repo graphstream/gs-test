@@ -198,6 +198,7 @@ public class TestAPSP {
 	}
 	
 	@Test
+	@SuppressWarnings("unused")
 	public void Test3() {
 		Graph G = new SingleGraph("Test APSP 3", false, true);
 		
@@ -298,6 +299,7 @@ public class TestAPSP {
 		graph.getEdge("BC").setAttribute("weight", 10.0);
 	}
 
+	@SuppressWarnings("unused")
 	protected static void buildGraph3(Graph graph) {
 		//    B---     A-B = 10, A-C = 3, A-D = 1
 		//   /|\  \    B-C = 6,  B-D = 4, B-E = 3

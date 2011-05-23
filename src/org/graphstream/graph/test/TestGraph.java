@@ -39,6 +39,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AdjacencyListGraph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.graph.implementations.MultiNode;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Test;
 
@@ -161,7 +162,6 @@ public class TestGraph {
 		// testDirected( new AdjacencyListGraph( "alg" ) );
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void testDirected(Graph graph) {
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -218,8 +218,10 @@ public class TestGraph {
 		//
 		// BC changes its direction, and AB becomes directed.
 
-		BC.switchDirection();
-		AB.setDirected(true);
+		graph.removeEdge("BC");
+		BC = graph.addEdge("BC", "C", "B", true);
+		graph.removeEdge("AB");
+		AB = graph.addEdge("AB", "A", "B", true);
 
 		assertTrue(AB.isDirected());
 		assertTrue(BC.isDirected());
@@ -252,13 +254,44 @@ public class TestGraph {
 	}
 
 	@Test
+	public void testMulti() {
+		MultiGraph graph = new MultiGraph("g");
+		MultiNode A = graph.addNode("A");
+		MultiNode B = graph.addNode("B");
+		
+		graph.addEdge("AB1", "A", "B");
+		graph.addEdge("AB2", "A", "B");
+		
+		assertEquals(2, A.getDegree());
+		assertEquals(2, B.getDegree());
+	}
+	
+	@Test
+	public void testSingle() {
+		SingleGraph graph = new SingleGraph("g");
+		Node A = graph.addNode("A");
+		Node B = graph.addNode("B");
+		
+		graph.addEdge("AB1", "A", "B");
+		
+		try {
+			graph.addEdge("AB2", "A", "B");
+			fail();
+		} catch(Exception e) {
+			// Ok !
+		}
+		
+		assertEquals(1, A.getDegree());
+		assertEquals(1, B.getDegree());
+	}
+	
+	@Test
 	public void testIterables() {
 		testIterables(new SingleGraph("sg"));
 		testIterables(new MultiGraph("mg"));
 		// testIterables( new AdjacencyListGraph( "alg" ) );
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void testIterables(Graph graph) {
 		Node A = graph.addNode("A");
 		Node B = graph.addNode("B");
@@ -334,8 +367,12 @@ public class TestGraph {
 		assertTrue(edges.contains(CA));
 		edges.clear();
 
-		AB.setDirected(true);
-		BC.setDirected(true);
+		graph.removeEdge("AB");
+		AB = graph.addEdge("AB", "A", "B", true);
+		
+		graph.removeEdge("BC");
+		BC = graph.addEdge("BC", "B", "C", true);
+		
 		// A
 		// |\
 		// | \

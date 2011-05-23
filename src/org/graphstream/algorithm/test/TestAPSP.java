@@ -345,7 +345,7 @@ public class TestAPSP {
 		System.out.printf("%s:%n", node.getId());
 
 		for (String other : info.targets.keySet()) {
-			float Dij = info.targets.get(other).distance;
+			double Dij = info.targets.get(other).distance;
 			System.out.printf("    -> %s = %4.3f%n", other, Dij);
 		}
 	}

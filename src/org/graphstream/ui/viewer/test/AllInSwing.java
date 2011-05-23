@@ -5,40 +5,26 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.graphstream.graph.Graph;
+import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
 import org.graphstream.graph.implementations.MultiGraph;
 
 public class AllInSwing {
 	public static void main(String args[]) {
-		new AllInSwing();
-	}
-	
-	public AllInSwing() {
-		// On est dans le thread main.
-		
-		Graph graph  = new MultiGraph("mg");
-		
-		// On demande au viewer de considérer que le graphe ne sera lu et modifié que
-		// dans le thread Swing.
-		
-		Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING_THREAD);
-
-		// À Partir de là, le viewer considère que le graphe est dans son propre thread,
-		// c'est-à-dire le thread Swing. Il est donc dangereux d'y toucher dans la thread
-		// main. On utilise invokeLater pour faire tourner du code dans le thread Swing,
-		// par exemple pour initialiser l'application :
-		
-		SwingUtilities.invokeLater(new InitializeApplication(viewer, graph));
+		System.setProperty( "gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer" );
+		// Avec invokeLater, on est sûr que tout le code tourne toujours dans
+		// le thread Swing.
+		SwingUtilities.invokeLater(new ApplicationExample());
 	}
 }
 
-class InitializeApplication extends JFrame implements Runnable {
+class ApplicationExample extends JFrame implements Runnable {
 	protected Graph graph;
 	protected Viewer viewer;
 	
-	public InitializeApplication(Viewer viewer, Graph graph) {
-		this.viewer = viewer;
-		this.graph = graph;
+	public ApplicationExample() {
+		this.graph = new MultiGraph("mg");
+		this.viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_SWING_THREAD);
 	}
 	
 	public void run() {
@@ -58,7 +44,18 @@ class InitializeApplication extends JFrame implements Runnable {
    
   		// On insère la vue principale du viewer dans la JFrame.
   		
-		add(viewer.addDefaultView( false ), BorderLayout.CENTER );
+  		View view = viewer.addDefaultView(false);
+  		
+		add(view, BorderLayout.CENTER);
+		
+		// On centre la vue en (1,0)
+		
+		view.setViewCenter(1,0,0);
+		
+		// On zoome à 200%.
+		
+		view.setViewPercent(0.5);
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setVisible(true);

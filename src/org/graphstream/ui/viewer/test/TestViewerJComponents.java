@@ -47,7 +47,7 @@ public class TestViewerJComponents {
 		// setLAF();
 		new TestViewerJComponents();
 	}
-
+	
 	public TestViewerJComponents() {
 		Graph graph = new MultiGraph("main graph");
 		ThreadProxyPipe toSwing = new ThreadProxyPipe(graph);

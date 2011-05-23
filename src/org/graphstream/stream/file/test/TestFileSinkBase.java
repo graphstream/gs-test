@@ -50,7 +50,7 @@ import org.junit.Test;
  * .
  * 
  * <p>
- * This files does all the tests. To implement a test for a specific file
+ * This file does all the tests. To implement a test for a specific file
  * format, you have only to implement/override two methods :
  * <ul>
  * <li>Override the {@link #aTemporaryGraphFileName()} method that will return

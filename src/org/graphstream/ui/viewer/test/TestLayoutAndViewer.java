@@ -56,27 +56,43 @@ public class TestLayoutAndViewer {
 		graph.addAttribute("ui.stylesheet", styleSheet);
 		fromViewer.addSink(graph);
 		viewer.addDefaultView(true);
+		
+		// We make a loop between the layout and the graph.
+		// Both listen at the other, however the graph
+		// can listen only at attributes of the graph since
+		// only the "xyz" positions are needed. GraphStream
+		// handles such loops gracefully (this is called
+		// graph synchronization).
 		graph.addSink(layout);
 		layout.addAttributeSink(graph);
 
+		// Generate a graph.
 		Generator gen = new DorogovtsevMendesGenerator();
 
 		gen.addSink(graph);
 		gen.begin();
-		for (int i = 0; i < 5000; i++)
+		for (int i = 0; i < 500; i++)
 			gen.nextEvents();
 		gen.end();
 
 		while (loop) {
+			// Get the events from the viewer (is the view
+			// closed, is the mouse pressed). This comes
+			// under the form of attributes.
 			fromViewer.pump();
 
 			if (graph.hasAttribute("ui.viewClosed")) {
 				loop = false;
 			} else {
-				try {
-					Thread.sleep(20);
-				} catch (Exception e) {
-				}
+				try { Thread.sleep(20); } catch (Exception e) {}
+				
+				// We compute one step of the layout.
+				// The more the layout is iterated, better
+				// is the layout. Note that at the contrary
+				// of automatic layout, the algorithm will
+				// never end. You must stop it by yourself,
+				// by observing the layout.getStabilization()
+				// value (0 not stable, 1 fully stable).
 				layout.compute();
 			}
 		}
@@ -84,6 +100,7 @@ public class TestLayoutAndViewer {
 		System.exit(0);
 	}
 
-	protected static String styleSheet = "node { size: 3px; fill-color: rgb(150,150,150); }"
-			+ "edge { fill-color: rgb(100,100,100); }";
+	protected static String styleSheet =
+		  "node { size: 3px; fill-color: rgb(150,150,150); }"
+		+ "edge { fill-color: rgb(100,100,100); }";
 }
